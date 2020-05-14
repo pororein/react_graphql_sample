@@ -1,0 +1,90 @@
+@startuml
+
+'left to right direction
+
+title レビュー支援システム
+
+'アクター
+:レビュアー: as reviewer
+:レビューイ: as reviewee
+:ドキュメント修正者: as maintainer
+:プロジェクト管理者: as projectManager
+:システム管理者: as systemAdmin
+
+maintainer .> reviewee
+
+' システムユースケース
+rectangle "レビュー支援システム" as smartReviewApp {
+    package "レビューイ" as revieweePackage {
+        (ドキュメント登録) as uploadDocuments
+        (レビュー依頼申請) as reviewRequest
+        (レビュー記録作成) as createReviewResultReviewee
+    }
+
+    package "レビュアー" as reviewerPackage{ 
+        (観点チェックリスト登録) as registrationChecklist
+        (観点チェックリスト編集) as updateChecklist
+        (レビュー結果作成) as createReviewResult
+    }
+
+    package "プロジェクト管理者" as projectManagerPackage {
+        (プロジェクト作成/編集) as editProject
+        (プロジェクトメンバ編集) as editProjectMember
+        (メンバロール編集) as editMemberRole
+        (レビュアー評価) as reviewerAssessment
+    }
+
+    package "システム管理者" as systemAdminPackage {
+        (ユーザー登録) as registrationUser
+        (ユーザー編集) as editUser
+        (ユーザー削除) as deleteUser
+    }
+}
+
+' レビューイパッケージ相関関係
+reviewee - uploadDocuments
+reviewee - reviewRequest
+reviewee - createReviewResultReviewee
+reviewRequest .> uploadDocuments: include
+
+' レビュアーパッケージ相関関係
+reviewer - registrationChecklist
+reviewer - updateChecklist
+reviewer - createReviewResult
+registrationChecklist .> updateChecklist: extends
+
+' プロジェクト管理者パッケージ相関関係
+projectManager - editProject
+projectManager - editProjectMember
+projectManager - editMemberRole
+projectManager - reviewerAssessment
+editProject .> editProjectMember: include
+editProjectMember .> editMemberRole: include
+
+' システム管理者パッケージ相関関係
+systemAdmin - registrationUser
+systemAdmin - editUser
+systemAdmin - deleteUser
+
+' ##レイアウト##
+' アクターどうしの位置関係
+maintainer -[hidden]down- reviewee
+reviewee -[hidden]down- reviewer
+reviewer -[hidden]down- projectManager
+projectManager -[hidden]down- systemAdmin
+
+' ユースケースの位置関係
+uploadDocuments -[hidden]down- reviewRequest
+reviewRequest -[hidden]down- createReviewResultReviewee
+createReviewResultReviewee -[hidden]down- registrationChecklist
+registrationChecklist -[hidden]down- updateChecklist
+updateChecklist -[hidden]down- createReviewResult
+createReviewResult -[hidden]down- editProject
+editProject -[hidden]down- editProjectMember
+editProjectMember -[hidden]down- editMemberRole
+editMemberRole -[hidden]down- reviewerAssessment
+reviewerAssessment -[hidden]down- registrationUser
+registrationUser -[hidden]down- editUser
+editUser -[hidden]down- deleteUser
+
+@enduml
