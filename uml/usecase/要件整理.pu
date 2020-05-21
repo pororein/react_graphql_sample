@@ -22,6 +22,7 @@ rectangle "レビュー支援システム" as smartReviewApp {
     }
 
     package "レビュアー" as reviewerPackage{ 
+        (観点チェックリスト公開範囲設定) as settingCheckListScope
         (観点チェックリスト登録) as registrationChecklist
         (観点チェックリスト編集) as updateChecklist
         (レビュー結果作成) as createReviewResult
@@ -48,9 +49,11 @@ reviewee - createReviewResultReviewee
 reviewRequest .> uploadDocuments: include
 
 ' レビュアーパッケージ相関関係
+reviewer - settingCheckListScope
 reviewer - registrationChecklist
 reviewer - updateChecklist
 reviewer - createReviewResult
+registrationChecklist .> settingCheckListScope: include
 registrationChecklist .> updateChecklist: extends
 
 ' プロジェクト管理者パッケージ相関関係
@@ -76,7 +79,8 @@ projectManager -[hidden]down- systemAdmin
 ' ユースケースの位置関係
 uploadDocuments -[hidden]down- reviewRequest
 reviewRequest -[hidden]down- createReviewResultReviewee
-createReviewResultReviewee -[hidden]down- registrationChecklist
+createReviewResultReviewee -[hidden]down- settingCheckListScope
+settingCheckListScope -[hidden]down- registrationChecklist
 registrationChecklist -[hidden]down- updateChecklist
 updateChecklist -[hidden]down- createReviewResult
 createReviewResult -[hidden]down- editProject
