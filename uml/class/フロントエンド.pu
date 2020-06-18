@@ -1,0 +1,198 @@
+@startuml
+
+package views {
+    package component {
+        class loginForm {
+            Status status
+
+            void updateId(String)
+            void updatePassword(String)
+            void login()
+        }
+
+        class userListView {
+            User[] userList
+            Filter condition
+
+            void search()
+            void delete(UserId)
+        }
+
+        class userEditForm {
+            User userInfo
+            Mode mode
+
+            void editUser()
+        }
+
+        class reviewRequestForm {
+            ReviewInfo reviewInfo
+
+            void createReviewRequest()
+        }
+
+        class reviewListView {
+            ReviewInfo reviewInfo
+
+            void showDetail(ReviewId)
+            void delete(ReviewId)
+        }
+
+        class reviewEditForm {
+            ReviewInfo reviewInfo
+            Mode mode
+
+            void editReview()
+        }
+
+        class projectListView {
+            ProjectInfo[] projectsInfo
+
+            void showProject(ProjectId)
+            void editProject(ProjectId)
+            void createProject()
+            void deleteProject(ProjectId)
+        }
+
+        class projectEditForm {
+            ProjectInfo ProjectInfo
+            Mode mode
+
+            void projectEdit()
+        }
+
+        class checkListView {
+            CheckList[] checkLists
+
+            void show(CheckListId)
+            void delete(CheckListId)
+        }
+
+        class checkListEditForm {
+            CheckList checkList
+            Mode mode
+
+            void editCheckList()
+        }
+
+        class menubar {
+            String content
+
+            void showUserList()
+            void createReviewRequest()
+            void showReviewList()
+            void showProjectList()
+            void createCheckList()
+            void showCheckList()
+            void Logout()
+        }
+    }
+
+    package containers {
+        class loginPage {
+            loginFormState state
+            loginForm component
+
+            void login()
+        }
+
+        class userListPage {
+            userListViewState state
+            userListView component
+
+            void search()
+            void delete(UserId)
+        }
+
+        class userEditPage {
+            userEditFormState state
+            userEditForm component
+
+            void editUser()
+        }
+
+        class reviewRequestPage {
+            reviewRequestFormState state
+            reviewRequestForm component
+
+            void createReviewRequest()
+        }
+
+        class reviewListPage {
+            reviewListViewState state
+            reviewListView component
+
+            void showDetail(ReviewId)
+            void delete(ReviewId)
+        }
+
+        class reviewEditPage {
+            reviewEditFormState state
+            reviewEditForm component
+
+            void editReview()
+        }
+
+        class projectListPage {
+            projectListViewState state
+            projectListView component
+
+            void showProject(ProjectId)
+            void editProject(ProjectId)
+            void createProject()
+            void deleteProject(ProjectId)
+        }
+
+        class projectEditPage {
+            projectEditFormState state
+            projectEditForm component
+
+            void projectEdit()
+        }
+
+        class checkListPage {
+            checkListViewState state
+            checkListView component
+
+            void show(CheckListId)
+            void delete(CheckListId)
+        }
+
+        class checkListEditPage {
+            checkListEditFormState state
+            checkListEditForm component
+
+            void editCheckList()
+        }
+
+        class consolePage {
+            menubarState state
+            menubar component
+            userListPage userList
+            userEditPage userEdit
+            reviewRequestPage reviewRequest
+            reviewListPage reviewList
+            reviewEditPage reviewEdit
+            projectListPage projectList
+            projectEditPage projectEdit
+            checkListPage checkList
+            checkListEditPage checkListEdit
+
+            void showUserList()
+            void createReviewRequest()
+            void showReviewList()
+            void showProjectList()
+            void createCheckList()
+            void showCheckList()
+            void Logout()
+        }
+    }
+}
+
+package state {
+    package ducks {
+
+    }
+}
+
+@enduml
