@@ -410,7 +410,7 @@ consolePage "1" *-- "1" checkListEditPage
 loginFormState ..> loginPage
 userListViewState ..> userListPage
 userEditFormState ..> userEditPage
-reviewRequestForm ..> reviewRequestPage
+reviewRequestFormState ..> reviewRequestPage
 reviewListViewState ..> reviewListPage
 reviewEditFormState ..> reviewEditPage
 projectListViewState ..> projectListPage
@@ -422,6 +422,64 @@ menubarState ..> consolePage
 ' ##レイアウト##
 ' ## パッケージの位置 ##
 views -[hidden]down- state
-reviewRequestPage -[hidden]down- menubarState
+
+' ## コンポーネント同士の位置 ##
+loginForm -[hidden]right- userListView
+userListView -[hidden]right- userEditForm
+userEditForm -[hidden]right- reviewRequestForm
+reviewRequestForm -[hidden]right- reviewListView
+reviewListView -[hidden]right- reviewEditForm
+reviewEditForm -[hidden]down- projectListView
+projectListView -[hidden]right- projectEditForm
+projectEditForm -[hidden]right- checkListView
+checkListView -[hidden]right- checkListEditForm
+checkListEditForm -[hidden]right- menubar
+
+' ## コンテナ同士の位置
+loginPage -[hidden]right- userListPage
+userListPage -[hidden]right- userEditPage
+userEditPage -[hidden]right- reviewRequestPage
+reviewRequestPage -[hidden]right- reviewListPage
+reviewListPage -[hidden]right- reviewEditPage
+reviewEditPage -[hidden]right- projectListPage
+projectListPage -[hidden]right- projectEditPage
+projectEditPage -[hidden]right- checkListPage
+checkListPage -[hidden]right- checkListEditPage
+reviewListPage -[hidden]down- consolePage
+
+' ## コンテナとコンポーネントの位置 ##
+loginForm -[hidden]down- loginPage
+userListView -[hidden]down- userListPage
+userEditForm -[hidden]down- userEditPage
+reviewRequestForm -[hidden]down- reviewRequestPage
+reviewListView -[hidden]down- reviewListPage
+reviewEditForm -[hidden]down- reviewEditPage
+projectListView -[hidden]down- projectListPage
+projectEditForm -[hidden]down- projectEditPage
+checkListView -[hidden]down- checkListPage
+checkListEditForm -[hidden]down- checkListEditPage
+
+' ## React State同士の位置 ##
+loginFormState -[hidden]right- userListViewState
+userListViewState -[hidden]right- userEditFormState
+userEditFormState -[hidden]right- reviewRequestFormState
+reviewRequestFormState -[hidden]right- reviewListViewState
+reviewListViewState -[hidden]right- reviewEditFormState
+reviewEditFormState -[hidden]down- projectListViewState
+projectListViewState -[hidden]right- projectEditFormState
+projectEditFormState -[hidden]right- checkListViewState
+checkListViewState -[hidden]right- checkListEditFormState
+
+' ## コンテナとReact Stateの位置 ##
+'loginFormState -[hidden]up- loginPage
+'userListViewState -[hidden]up- userListPage
+'userEditFormState -[hidden]up- userEditPage
+'reviewRequestFormState -[hidden]up- reviewRequestPage
+'reviewListViewState -[hidden]up- reviewListPage
+'reviewEditFormState -[hidden]up- reviewEditPage
+'projectListViewState -[hidden]up- projectListPage
+'projectEditFormState -[hidden]up- projectEditPage
+'checkListViewState -[hidden]up- checkListPage
+'checkListEditFormState -[hidden]up- checkListEditPage
 
 @enduml
