@@ -1,5 +1,6 @@
 @startuml
 
+' ##クラス定義 - view##
 package views {
     package component {
         class loginForm {
@@ -15,7 +16,7 @@ package views {
             Filter condition
 
             void search()
-            void delete(UserId)
+            void delete(String)
         }
 
         class userEditForm {
@@ -32,10 +33,10 @@ package views {
         }
 
         class reviewListView {
-            ReviewInfo reviewInfo
+            ReviewInfo[] reviewInfoList
 
-            void showDetail(ReviewId)
-            void delete(ReviewId)
+            void showDetail(String)
+            void delete(String)
         }
 
         class reviewEditForm {
@@ -46,12 +47,12 @@ package views {
         }
 
         class projectListView {
-            ProjectInfo[] projectsInfo
+            ProjectInfo[] projectsInfoList
 
-            void showProject(ProjectId)
-            void editProject(ProjectId)
+            void showProject(String)
+            void editProject(String)
             void createProject()
-            void deleteProject(ProjectId)
+            void deleteProject(String)
         }
 
         class projectEditForm {
@@ -64,8 +65,8 @@ package views {
         class checkListView {
             CheckList[] checkLists
 
-            void show(CheckListId)
-            void delete(CheckListId)
+            void show(String)
+            void delete(String)
         }
 
         class checkListEditForm {
@@ -101,7 +102,7 @@ package views {
             userListView component
 
             void search()
-            void delete(UserId)
+            void delete(String)
         }
 
         class userEditPage {
@@ -122,8 +123,8 @@ package views {
             reviewListViewState state
             reviewListView component
 
-            void showDetail(ReviewId)
-            void delete(ReviewId)
+            void showDetail(String)
+            void delete(String)
         }
 
         class reviewEditPage {
@@ -137,10 +138,10 @@ package views {
             projectListViewState state
             projectListView component
 
-            void showProject(ProjectId)
-            void editProject(ProjectId)
+            void showProject(String)
+            void editProject(String)
             void createProject()
-            void deleteProject(ProjectId)
+            void deleteProject(String)
         }
 
         class projectEditPage {
@@ -154,8 +155,8 @@ package views {
             checkListViewState state
             checkListView component
 
-            void show(CheckListId)
-            void delete(CheckListId)
+            void show(String)
+            void delete(String)
         }
 
         class checkListEditPage {
@@ -189,10 +190,224 @@ package views {
     }
 }
 
+' ##クラス定義 - duck's##
 package state {
     package ducks {
+        class loginFormState {
+            LoginInfo loginInfo
+            Status status
+        }
 
+        class userListViewState {
+            User[] userList
+            Fliter fliter
+        }
+
+        class userEditFormState {
+            User userInfo
+            Mode mode
+        }
+
+        class reviewRequestFormState {
+            ReviewInfo reviewInfo
+        }
+
+        class reviewListViewState {
+            ReviewInfo[] reviewInfoList
+        }
+
+        class reviewEditFormState {
+            ReviewInfo reviewInfo
+            Mode mode
+        }
+
+        class projectListViewState {
+            ProjectInfo[] projectInfoList
+        }
+
+        class projectEditFormState {
+            ProjectInfo projectInfo
+        }
+
+        class checkListViewState {
+            CheckList[] checkLists
+        }
+
+        class checkListEditFormState {
+            CheckList checkList
+            Mode mode
+        }
+
+        class menubarState {
+            String content
+        }
+
+        package types {
+            enum Status {
+                "INIT"
+                "LOGGINGIN"
+                "FAILED"
+                "SUCCESS"
+            }
+
+            class LoginInfo {
+                String id
+                String password
+            }
+
+            enum Role {
+                "ADMINISTRATOR"
+                "PROJECT_MANAGER"
+                "USER"
+            }
+
+            class User {
+                String id
+                String firstName
+                String lastName
+                Role role
+            }
+
+            class Filter {
+                String[] ids
+                String title
+                String[] tags
+            }
+
+            enum Mode {
+                "CREATE"
+                "UPDATE"
+                "VIEW"
+            }
+
+            enum Scope {
+                "PUBLIC"
+                "PRIVATE"
+                "PROJECT"
+            }
+
+            class PointOut {
+                String id
+                String title
+                String targetPosition
+                String detail
+                Boolean expand
+            }
+
+            class ReviewInfo {
+                String id
+                String title
+                String documentPath
+                String[] tags
+                String[] checkListIds
+                PointOut[] pointOutList
+                Scope scope
+            }
+
+            class ProjectMember {
+                User user
+                Role role
+            }
+
+            class ProjectInfo {
+                String id
+                ProjectMember[] members
+                String detail
+                ReviewInfo[] reviewList
+                Scope scope
+            }
+
+            class CheckItem {
+                String id
+                String title
+                String detail
+                Boolean performed
+            }
+
+            class CheckList {
+                String id
+                CheckItem[] items
+            }
+        }
     }
 }
+
+' ##クラス相互関係##
+' ##型定義クラス相互関係##
+CheckList "1" o-- "1" CheckItem
+
+ProjectMember "1" *-- "1" User
+ProjectMember "1" *-- "1" Role
+
+ReviewInfo "1" o-- "0..*" PointOut
+
+ProjectInfo "1" ..> "1" Scope
+
+' ##型 - React State 相関関係##
+loginFormState "1" *-- "1" LoginInfo
+loginFormState "1" *-- "1" Status
+
+userListViewState "1" *-- "0..*" User
+userListViewState "1" *-- "1" Filter
+
+userEditFormState "1" *-- "1" User
+userEditFormState "1" *-- "1" Mode
+
+reviewRequestFormState "1" o-- "1" ReviewInfo
+
+reviewListViewState "1" o-- "0..*" ReviewInfo
+
+reviewEditFormState "1" *-- "1" ReviewInfo
+reviewEditFormState "1" *-- "1" Mode
+
+projectListViewState "1" o-- "0..*" ProjectInfo
+
+projectEditFormState "1" o-- "1" ProjectInfo
+
+checkListViewState "1" o-- "0..*" CheckList
+
+checkListEditFormState "1" *-- "1" CheckList
+checkListEditFormState "1" *-- "1" Mode
+
+' ##コンテナ - コンポーネント相関関係##
+loginForm ..> loginPage
+userListView ..> userListPage
+userEditForm ..> userEditPage
+reviewRequestForm ..> reviewRequestPage
+reviewListView ..> reviewListPage
+reviewEditForm ..> reviewEditPage
+projectListView ..> projectListPage
+projectEditForm ..> projectEditPage
+checkListView ..> checkListPage
+checkListEditForm ..> checkListEditPage
+menubar ..> consolePage
+
+consolePage "1" *-- "1" userListPage
+consolePage "1" *-- "1" userEditPage
+consolePage "1" *-- "1" reviewRequestPage
+consolePage "1" *-- "1" reviewListPage
+consolePage "1" *-- "1" reviewEditPage
+consolePage "1" *-- "1" projectListPage
+consolePage "1" *-- "1" projectEditPage
+consolePage "1" *-- "1" checkListPage
+consolePage "1" *-- "1" checkListEditPage
+
+' ##コンテナ - React State 相関関係##
+loginFormState ..> loginPage
+userListViewState ..> userListPage
+userEditFormState ..> userEditPage
+reviewRequestForm ..> reviewRequestPage
+reviewListViewState ..> reviewListPage
+reviewEditFormState ..> reviewEditPage
+projectListViewState ..> projectListPage
+projectEditFormState ..> projectEditPage
+checkListViewState ..> checkListPage
+checkListEditFormState ..> checkListEditPage
+menubarState ..> consolePage
+
+' ##レイアウト##
+' ## パッケージの位置 ##
+views -[hidden]down- state
+reviewRequestPage -[hidden]down- menubarState
 
 @enduml
