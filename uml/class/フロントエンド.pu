@@ -288,6 +288,12 @@ package state {
                 "PROJECT"
             }
 
+            enum ReviewStatus {
+                "NEW"
+                "REVIEWING"
+                "FINISHED"
+            }
+
             class PointOut {
                 String id
                 String title
@@ -303,6 +309,8 @@ package state {
                 String[] tags
                 String[] checkListIds
                 PointOut[] pointOutList
+                User[] reviewMembers
+                ReviewStatus status
                 Scope scope
             }
 
@@ -342,6 +350,8 @@ ProjectMember "1" *-- "1" User
 ProjectMember "1" *-- "1" Role
 
 ReviewInfo "1" o-- "0..*" PointOut
+ReviewInfo "1" o-- "1..*" User
+ReviewInfo "1" o-- "1" ReviewStatus
 
 ProjectInfo "1" ..> "1" Scope
 
