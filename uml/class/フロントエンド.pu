@@ -470,16 +470,4 @@ projectListViewState -[hidden]right- projectEditFormState
 projectEditFormState -[hidden]right- checkListViewState
 checkListViewState -[hidden]right- checkListEditFormState
 
-' ## コンテナとReact Stateの位置 ##
-'loginFormState -[hidden]up- loginPage
-'userListViewState -[hidden]up- userListPage
-'userEditFormState -[hidden]up- userEditPage
-'reviewRequestFormState -[hidden]up- reviewRequestPage
-'reviewListViewState -[hidden]up- reviewListPage
-'reviewEditFormState -[hidden]up- reviewEditPage
-'projectListViewState -[hidden]up- projectListPage
-'projectEditFormState -[hidden]up- projectEditPage
-'checkListViewState -[hidden]up- checkListPage
-'checkListEditFormState -[hidden]up- checkListEditPage
-
 @enduml
