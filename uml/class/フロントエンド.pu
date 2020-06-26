@@ -78,6 +78,7 @@ package views {
 
         class menubar {
             String content
+            Role role
 
             void showUserList()
             void createReviewRequest()
@@ -240,6 +241,7 @@ package state {
 
         class menubarState {
             String content
+            Role role
         }
 
         package types {
@@ -368,6 +370,8 @@ checkListViewState "1" o-- "0..*" CheckList
 
 checkListEditFormState "1" *-- "1" CheckList
 checkListEditFormState "1" *-- "1" Mode
+
+menubarState "1" *-- "1" Role
 
 ' ##コンテナ - コンポーネント相関関係##
 loginForm ..> loginPage
