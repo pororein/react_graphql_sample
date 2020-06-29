@@ -13,10 +13,10 @@ const mapDispatchToProps = (dispatch: loginFormTypes.Dispatch) => {
         login: () => {
             dispatch(operations.login());
         },
-        onChangeId: (id: loginFormTypes.Id) => {
+        onChangeId: (id: string) => {
             dispatch(operations.updateId(id));
         },
-        onChangePassword: (password: loginFormTypes.Password) => {
+        onChangePassword: (password: string) => {
             dispatch(operations.updatePassword(password));
         }
     };

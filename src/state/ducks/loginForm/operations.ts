@@ -1,14 +1,14 @@
 import actions from "./actions";
 import selectors from "./selectors";
-import type { Action, LoginInfo, Id, Password } from "./types";
+import type { Action, LoginInfo } from "./types";
 import { push } from "connected-react-router";
 import { put, call, take, fork, select } from "redux-saga/effects";
 
-const updateId = (id: Id): Action => {
+const updateId = (id: string): Action => {
     return actions.updateId(id);
 }
 
-const updatePassword = (password: Password): Action => {
+const updatePassword = (password: string): Action => {
     return actions.updatePassword(password);
 }
 
@@ -62,7 +62,7 @@ function* handleLogin() {
         if (result == "compleate") {
             yield put(success());
             yield put(cleaning());
-            yield put(push('/console'));
+            yield put(push('/console/reviewRequest'));
         } else {
             yield put(failed());
         }

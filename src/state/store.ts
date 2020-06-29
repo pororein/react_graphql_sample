@@ -3,6 +3,7 @@ import rootReducer from "./ducks";
 import { routerMiddleware } from "connected-react-router";
 import createSagaMiddleWare from "redux-saga";
 import { loginFormOperations } from "./ducks/loginForm";
+import { menubarOperations } from "./ducks/menubar";
 import { createBrowserHistory } from "history";
 
 interface ExtendedWindow extends Window {
@@ -23,7 +24,8 @@ export default function configureStore(preloadedState?: any) {
         composeReduxDevToolsEnhancers(applyMiddleware(...middlewares)),
     );
 
-    sagaMiddleware.run(loginFormOperations.rootSaga);
+  sagaMiddleware.run(loginFormOperations.rootSaga);
+  sagaMiddleware.run(menubarOperations.rootSaga);
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers

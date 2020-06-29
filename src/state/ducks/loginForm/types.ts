@@ -1,20 +1,11 @@
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from "redux";
-
-type Id = string;
-type Password = string;
-
-type LoginInfo = {
-    id: Id,
-    password: Password,
-};
-
-type LoginInfoElement = Id | Password;
+import type { LoginInfo, LoginStatus } from "../../../types";
 
 type LoginInfoType = "ID" | "PASSWORD";
 
 type Action = { type: "LOGIN" }
-    | { type: "UPDATEID", id: Id }
-    | { type: "UPDATEPASSWORD", password: Password }
+    | { type: "UPDATEID", id: string }
+    | { type: "UPDATEPASSWORD", password: string }
     | { type: "CLEANING", loginInfo: LoginInfo }
     | { type: "LOGGINGIN", status: "LOGGINGIN" }
     | { type: "FAILED", status: "FAILED" }
@@ -32,10 +23,7 @@ type Store = ReduxStore<LoginFormState, Action>;
 type Dispatch = ReduxDispatch<Action>;
 
 export {
-    Id,
-    Password,
     LoginInfo,
-    LoginInfoElement,
     LoginInfoType,
     Action,
     Status,

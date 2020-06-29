@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import type { LoginInfo, Id, Password, Action, LoginFormState, Status } from "./types";
+import type { LoginInfo, Action, LoginFormState, Status } from "./types";
 import { connectRouter } from 'connected-react-router';
 
 const initLoginInfo: LoginInfo = {
@@ -9,11 +9,11 @@ const initLoginInfo: LoginInfo = {
 
 const initState: Status = "INIT";
 
-function updateId(loginInfo: LoginInfo, id: Id): LoginInfo {
+function updateId(loginInfo: LoginInfo, id: string): LoginInfo {
     return Object.assign({}, loginInfo, { id: id });
 };
 
-function updatePassword(loginInfo: LoginInfo, password: Password): LoginInfo {
+function updatePassword(loginInfo: LoginInfo, password: string): LoginInfo {
     return Object.assign({}, loginInfo, { password: password });
 };
 

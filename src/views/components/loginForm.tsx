@@ -43,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 export type Props = {
   state: loginFormTypes.Status,
-  onChangeId: (id: loginFormTypes.Id) => void,
-  onChangePassword: (password: loginFormTypes.Password) => void,
+  onChangeId: (id: string) => void,
+  onChangePassword: (password: string) => void,
   login: () => void,
 };
 

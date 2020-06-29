@@ -14,7 +14,7 @@ ReactDOM.render(
     <ConnectedRouter history={history} noInitialPop>
       <Switch>
         <Route exact path="/" component={LoginPage} />
-        <Route exact path="/console" component={Menubar} />
+        <Route path="/console" component={Menubar} />
       </Switch>
     </ConnectedRouter>
   </ReduxProvider>,
