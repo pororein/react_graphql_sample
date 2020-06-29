@@ -79,6 +79,7 @@ package views {
         class menubar {
             String content
             Role role
+            ConsoleContents consoleContents
 
             void showUserList()
             void createReviewRequest()
@@ -87,6 +88,18 @@ package views {
             void createCheckList()
             void showCheckList()
             void Logout()
+        }
+
+        class consoleContents {
+            userListPage userListPage
+            userEditPage userEditPage
+            reviewRequestPage reviewRequestPage
+            reviewListPage reviewListPage
+            reviewEditPage reviewEditPage
+            projectListPage projectListPage
+            projectEditPage projectEditPage
+            checkListPage checkListPage
+            checkListEditPage checkListEditPage
         }
     }
 
@@ -170,15 +183,6 @@ package views {
         class consolePage {
             menubarState state
             menubar component
-            userListPage userList
-            userEditPage userEdit
-            reviewRequestPage reviewRequest
-            reviewListPage reviewList
-            reviewEditPage reviewEdit
-            projectListPage projectList
-            projectEditPage projectEdit
-            checkListPage checkList
-            checkListEditPage checkListEdit
 
             void showUserList()
             void createReviewRequest()
@@ -243,102 +247,104 @@ package state {
             String content
             Role role
         }
+    }
+}
 
-        package types {
-            enum Status {
-                "INIT"
-                "LOGGINGIN"
-                "FAILED"
-                "SUCCESS"
-            }
+package types {
+    enum LoginStatus {
+        "INIT"
+        "LOGGINGIN"
+        "FAILED"
+        "SUCCESS"
+    }
 
-            class LoginInfo {
-                String id
-                String password
-            }
+    class LoginInfo {
+        String id
+        String password
+    }
 
-            enum Role {
-                "ADMINISTRATOR"
-                "PROJECT_MANAGER"
-                "USER"
-            }
+    enum Role {
+        "ADMINISTRATOR"
+        "PROJECT_MANAGER"
+        "USER"
+    }
 
-            class User {
-                String id
-                String firstName
-                String lastName
-                Role role
-            }
+    class User {
+        String id
+        String firstName
+        String lastName
+        Role role
+    }
 
-            class Filter {
-                String[] ids
-                String title
-                String[] tags
-            }
+    class Filter {
+        String[] ids
+        String title
+        String[] tags
+    }
 
-            enum Mode {
-                "CREATE"
-                "UPDATE"
-                "VIEW"
-            }
+    enum Mode {
+        "CREATE"
+        "UPDATE"
+        "VIEW"
+    }
 
-            enum Scope {
-                "PUBLIC"
-                "PRIVATE"
-                "PROJECT"
-            }
+    enum Scope {
+        "PUBLIC"
+        "PRIVATE"
+        "PROJECT"
+    }
 
-            enum ReviewStatus {
-                "NEW"
-                "REVIEWING"
-                "FINISHED"
-            }
+    enum ReviewStatus {
+        "NEW"
+        "REVIEWING"
+        "MODEFIED"
+        "FINISHED"
+    }
 
-            class PointOut {
-                String id
-                String title
-                String targetPosition
-                String detail
-                Boolean expand
-            }
+    class PointOut {
+        String id
+        String title
+        String targetPosition
+        String detail
+        Boolean expand
+    }
 
-            class ReviewInfo {
-                String id
-                String title
-                String documentPath
-                String[] tags
-                String[] checkListIds
-                PointOut[] pointOutList
-                User[] reviewMembers
-                ReviewStatus status
-                Scope scope
-            }
+    class ReviewInfo {
+        String id
+        String title
+        String documentPath
+        String[] tags
+        String[] checkListIds
+        PointOut[] pointOutList
+        User[] reviewMembers
+        ReviewStatus status
+        Scope scope
+    }
 
-            class ProjectMember {
-                User user
-                Role role
-            }
+    class ProjectMember {
+        User user
+        Role role
+    }
 
-            class ProjectInfo {
-                String id
-                ProjectMember[] members
-                String detail
-                ReviewInfo[] reviewList
-                Scope scope
-            }
+    class ProjectInfo {
+        String id
+        ProjectMember[] members
+        String detail
+        ReviewInfo[] reviewList
+        Scope scope
+    }
 
-            class CheckItem {
-                String id
-                String title
-                String detail
-                Boolean performed
-            }
+    class CheckItem {
+        String id
+        String title
+        String detail
+        Boolean performed
+    }
 
-            class CheckList {
-                String id
-                CheckItem[] items
-            }
-        }
+    class CheckList {
+        String id
+        String title
+        CheckItem[] items
     }
 }
 
@@ -352,12 +358,13 @@ ProjectMember "1" *-- "1" Role
 ReviewInfo "1" o-- "0..*" PointOut
 ReviewInfo "1" o-- "1..*" User
 ReviewInfo "1" o-- "1" ReviewStatus
+ReviewInfo "1" o-- "1" Scope
 
 ProjectInfo "1" ..> "1" Scope
 
 ' ##型 - React State 相関関係##
 loginFormState "1" *-- "1" LoginInfo
-loginFormState "1" *-- "1" Status
+loginFormState "1" *-- "1" LoginStatus
 
 userListViewState "1" *-- "0..*" User
 userListViewState "1" *-- "1" Filter
@@ -396,15 +403,15 @@ checkListView ..> checkListPage
 checkListEditForm ..> checkListEditPage
 menubar ..> consolePage
 
-consolePage "1" *-- "1" userListPage
-consolePage "1" *-- "1" userEditPage
-consolePage "1" *-- "1" reviewRequestPage
-consolePage "1" *-- "1" reviewListPage
-consolePage "1" *-- "1" reviewEditPage
-consolePage "1" *-- "1" projectListPage
-consolePage "1" *-- "1" projectEditPage
-consolePage "1" *-- "1" checkListPage
-consolePage "1" *-- "1" checkListEditPage
+consoleContents "1" *-- "1" userListPage
+consoleContents "1" *-- "1" userEditPage
+consoleContents "1" *-- "1" reviewRequestPage
+consoleContents "1" *-- "1" reviewListPage
+consoleContents "1" *-- "1" reviewEditPage
+consoleContents "1" *-- "1" projectListPage
+consoleContents "1" *-- "1" projectEditPage
+consoleContents "1" *-- "1" checkListPage
+consoleContents "1" *-- "1" checkListEditPage
 
 ' ##コンテナ - React State 相関関係##
 loginFormState ..> loginPage
