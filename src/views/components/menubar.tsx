@@ -18,30 +18,30 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
+import PeopleAlt from "@material-ui/icons/PeopleAlt";
+import ExitToApp from "@material-ui/icons/ExitToApp";
+import PlaylistAdd from "@material-ui/icons/PlaylistAdd";
+import PeopleOutline from "@material-ui/icons/PeopleOutline";
 import { Route, Switch } from "react-router-dom";
 import ConsoleContents from './consoleContents';
 
 const drawerWidth = 240;
 
 type MenuItem = {
-    text: string,
-    icon: JSX.Element
+  text: string,
+  icon: JSX.Element,
+  action: () => void,  
 };
 
-const listItems: MenuItem[] = [
-    {
-        text: 'Check List',
-        icon: <ListAltIcon />,
-    },
-    {
-        text: 'Create Review',
-        icon: <TelegramIcon />,
-    },
-    {
-      text: 'Show Review List',
-      icon: <DynamicFeedIcon />,
-    }
-];
+export type Props = {
+  showUserList: () => void,
+  createReviewRequest: () => void,
+  showReviewList: () => void,
+  showProjectList: () => void,
+  createCheckList: () => void,
+  showCheckList: () => void,
+  logout: () => void,
+};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -100,9 +100,48 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
   
-  export default function menubar() {
+  export default function menubar(props: Props) {
     const classes = useStyles();
     const theme = useTheme();
+
+    const listItems: MenuItem[] = [
+      {
+        text: 'Users',
+        icon: <PeopleAlt />,
+        action: props.showUserList,
+      },
+      {
+        text: 'Create Review',
+        icon: <TelegramIcon />,
+        action: props.createReviewRequest,
+      },
+      {
+        text: 'Show Reviews',
+        icon: <DynamicFeedIcon />,
+        action: props.showReviewList,
+      },
+      {
+        text: 'Show Projects',
+        icon: <PeopleOutline />,
+        action: props.showProjectList,
+      },
+      {
+        text: 'Create Check List',
+        icon: <PlaylistAdd />,
+        action: props.createCheckList,
+      },
+      {
+        text: 'Show Check Lists',
+        icon: <ListAltIcon />,
+        action: props.showCheckList,
+      },
+      {
+        text: 'Logout',
+        icon: <ExitToApp />,
+        action: props.logout,
+      },
+    ];
+
     const [open, setOpen] = React.useState(false);
   
     const handleDrawerOpen = () => {
@@ -154,7 +193,7 @@ const useStyles = makeStyles((theme) => ({
           <Divider />
           <List>
             {listItems.map((item, index) => (
-              <ListItem button key={item.text}>
+              <ListItem button key={item.text} onClick={item.action}>
                     <ListItemIcon>
                         {item.icon}
                     </ListItemIcon>

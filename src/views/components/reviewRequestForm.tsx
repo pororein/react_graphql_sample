@@ -38,7 +38,7 @@ export default function reviewRequestForm() {
             <Card className={classes.card}>
                 <CardContent className={classes.cardContent}>
                     <Typography className={classes.typography}>
-                        フォーム
+                        レビュー作成フォーム
                     </Typography>
                 </CardContent>
             </Card>

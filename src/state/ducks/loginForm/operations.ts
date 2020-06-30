@@ -62,7 +62,7 @@ function* handleLogin() {
         if (result == "compleate") {
             yield put(success());
             yield put(cleaning());
-            yield put(push('/console/reviewRequest'));
+            yield put(push('/console'));
         } else {
             yield put(failed());
         }

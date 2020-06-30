@@ -7,14 +7,14 @@ import { History } from 'history';
 export type rootState = {
     router: History<any>,
     loginFormState: loginFormTypes.LoginFormState,
-    content: menubarTypes.MenubarState,
+    menubarState: menubarTypes.MenubarState,
 };
 
 const rootReducer = (history: History<any>) =>
     combineReducers({
         router: connectRouter(history),
         loginFormState: loginFormState,
-//        menubarState: menubarState,
+        menubarState: menubarState,
     });
 
 export default rootReducer;

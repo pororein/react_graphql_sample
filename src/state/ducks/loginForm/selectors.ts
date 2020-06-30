@@ -1,5 +1,5 @@
 import type { LoginFormState, Status, LoginInfo } from "./types";
-import { rootState } from '../index'; 
+import type { rootState } from '../index'; 
 
 const getLoginInfo = (state: rootState): LoginInfo => {
     return state.loginFormState.loginInfo;
