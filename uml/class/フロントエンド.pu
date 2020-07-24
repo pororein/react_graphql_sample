@@ -101,6 +101,17 @@ package views {
             checkListPage checkListPage
             checkListEditPage checkListEditPage
         }
+
+        ' 共通化した部品
+        package molecules {
+            class listViewTable {
+                Column[] columns
+                Object[] rows
+                String linkKey
+                
+                void handleAction()
+            }
+        }
     }
 
     package containers {
@@ -245,7 +256,7 @@ package state {
 
         class menubarState {
             String content
-            Role role
+            SystemRole role
         }
     }
 }
@@ -263,17 +274,22 @@ package types {
         String password
     }
 
-    enum Role {
+    enum SystemRole {
         "ADMINISTRATOR"
-        "PROJECT_MANAGER"
         "USER"
+    }
+
+    enum ProjectRole {
+        "MANAGER"
+        "MEMBER"
     }
 
     class User {
         String id
+        String eMailAddress
         String firstName
         String lastName
-        Role role
+        SystemRole role
     }
 
     class Filter {
@@ -301,12 +317,23 @@ package types {
         "FINISHED"
     }
 
+    enum ReviewMemberType {
+        "REVIEWEE"
+        "REVIEWER"
+        "PARTICIPANT"
+    }
+
     class PointOut {
         String id
         String title
         String targetPosition
         String detail
         Boolean expand
+    }
+
+    class ReviewMember {
+        User member
+        ReviewMemberType memberType
     }
 
     class ReviewInfo {
@@ -316,14 +343,14 @@ package types {
         String[] tags
         String[] checkListIds
         PointOut[] pointOutList
-        User[] reviewMembers
+        ReviewMember[] reviewMembers
         ReviewStatus status
         Scope scope
     }
 
     class ProjectMember {
         User user
-        Role role
+        ProjectRole role
     }
 
     class ProjectInfo {
@@ -346,14 +373,21 @@ package types {
         String title
         CheckItem[] items
     }
+
+    class Column {
+        String id
+        String name
+    }
 }
 
 ' ##クラス相互関係##
 ' ##型定義クラス相互関係##
 CheckList "1" o-- "1" CheckItem
 
+User "1" *-- "1" SystemRole
+
 ProjectMember "1" *-- "1" User
-ProjectMember "1" *-- "1" Role
+ProjectMember "1" *-- "1" ProjectRole
 
 ReviewInfo "1" o-- "0..*" PointOut
 ReviewInfo "1" o-- "1..*" User
@@ -361,6 +395,9 @@ ReviewInfo "1" o-- "1" ReviewStatus
 ReviewInfo "1" o-- "1" Scope
 
 ProjectInfo "1" ..> "1" Scope
+
+ReviewMember "1" *-- "1" User
+ReviewMember "1" *-- "1" ReviewMemberType
 
 ' ##型 - React State 相関関係##
 loginFormState "1" *-- "1" LoginInfo
@@ -388,7 +425,15 @@ checkListViewState "1" o-- "0..*" CheckList
 checkListEditFormState "1" *-- "1" CheckList
 checkListEditFormState "1" *-- "1" Mode
 
-menubarState "1" *-- "1" Role
+menubarState "1" *-- "1" SystemRole
+
+listViewTable "1" *-- "0..*" Column
+
+' ##コンポーネント - 共通部品相関関係 ##
+listViewTable ..> userListView
+listViewTable ..> reviewListView
+listViewTable ..> projectListView
+listViewTable ..> checkListView
 
 ' ##コンテナ - コンポーネント相関関係##
 loginForm ..> loginPage
