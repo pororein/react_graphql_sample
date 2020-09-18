@@ -1,9 +1,7 @@
 import type { CheckItem } from "./CheckItem";
 
-type CheckList = {
+export type CheckList = {
     id: string,
     title: String,
-    items: CheckItem[],
+    items?: CheckItem[],
 };
-
-export { CheckList };

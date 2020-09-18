@@ -1,3 +1,1 @@
-type Scope = "PUBLIC" | "PRIVATE" | "PROJECT";
-
-export { Scope };
+export enum Scope { PUBLIC, PRIVATE, PROJECT };

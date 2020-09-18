@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 const mapStateToProps = (state: any) => ({
     content: menubarSelectors.getContent(state),
-    role: menubarSelectors.getRole(state),
+    user: menubarSelectors.getUser(state),
 });
 
 const mapDispatchToProps = (dispatch: menubarTypes.Dispatch) => {

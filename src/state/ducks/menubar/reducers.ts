@@ -1,16 +1,20 @@
 import { combineReducers } from "redux";
-import type { Action, Content, MenubarState } from "./types";
+import type { ContetsAction, UserAction, Content, MenubarState } from "./types";
+import type { User } from "../../../types";
 
 const initialState: MenubarState = {
-    content: "CONSOLE",
-    role: "USER",
+    content: "CONSOLE"
 };
 
 function changeContents(orgContent: MenubarState, updateContent: Content): MenubarState {
     return Object.assign({}, orgContent, { content: updateContent });
 }
 
-const content = (state: MenubarState = initialState, action: Action): MenubarState => {
+function changeUser(orgContent: MenubarState, updateUserInfo: User): MenubarState {
+    return Object.assign({}, orgContent, { user: updateUserInfo });
+}
+
+const content = (state: MenubarState = initialState, action: ContetsAction | UserAction): MenubarState => {
     switch (action.type) {
         case "SHOW_USER_LIST":
         case "CREATE_REVIEW":
@@ -20,6 +24,8 @@ const content = (state: MenubarState = initialState, action: Action): MenubarSta
         case "SHOW_CHECK_LIST":
         case "LOGOUT":
             return changeContents(state, action.content);
+        case "UPDATE_USER":
+            return changeUser(state, action.user);
         default:
             return state;
     }

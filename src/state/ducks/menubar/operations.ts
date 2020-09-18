@@ -1,34 +1,40 @@
 import actions from "./actions";
-import type { Action } from "./types";
+import type { ContetsAction, UserAction } from "./types";
 import { push } from "connected-react-router";
 import { put, call, take, fork, select } from "redux-saga/effects";
+import { User } from "../../../types";
+import reviewRequestFormActions from "../reviewRequestForm/actions";
 
-const showUserList = (): Action => {
+const showUserList = (): ContetsAction => {
     return actions.showUserList();
 };
 
-const createReviewRequest = (): Action => {
+const createReviewRequest = (): ContetsAction => {
     return actions.createReviewRequest();
 };
 
-const showReviewList = (): Action => {
+const showReviewList = (): ContetsAction => {
     return actions.showReviewList();
 };
 
-const showProjectList = (): Action => {
+const showProjectList = (): ContetsAction => {
     return actions.showProjectList();
 };
 
-const createCheckList = (): Action => {
+const createCheckList = (): ContetsAction => {
     return actions.createCheckList();
 };
 
-const showCheckList = (): Action => {
+const showCheckList = (): ContetsAction => {
     return actions.showCheckList();
 };
 
-const logout = (): Action => {
+const logout = (): ContetsAction => {
     return actions.logout();
+};
+
+const updateUser = (user: User): UserAction => {
+    return actions.updateUser(user);
 };
 
 function* handleShowUser() {
@@ -41,6 +47,7 @@ function* handleShowUser() {
 function* handleCreateReview() {
     while (true) {
         const action = yield take("CREATE_REVIEW"); 
+        yield put(reviewRequestFormActions.getRequest());
         yield put(push('/console/reviewRequest'));
     }
 };
@@ -99,5 +106,6 @@ export default {
     createCheckList,
     showCheckList,
     logout,
+    updateUser,
     rootSaga,
 }

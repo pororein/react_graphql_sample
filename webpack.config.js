@@ -11,7 +11,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "[name].js"
+        filename: "[name].js",
+        publicPath: "/",
     },
 
     module: {
@@ -55,6 +56,7 @@ module.exports = {
         contentBase: path.resolve(__dirname, './dist'),
         inline: true,
         watchContentBase: true,
-        open: true
+        open: true,
+        historyApiFallback: true
     }
 };

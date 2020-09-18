@@ -11,4 +11,6 @@ export type { ReviewInfo } from "./ReviewInfo";
 export type { ReviewStatus } from "./ReviewStatus";
 export type { Role } from "./Role";
 export type { Scope } from "./Scope";
-export type { User } from "./User"; 
+export type { User } from "./User";
+export type { ReviewMember } from "./ReviewMember";
+export type { ReviewMemberType } from "./ReviewMemberType";

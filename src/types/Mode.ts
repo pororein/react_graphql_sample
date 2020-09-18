@@ -1,3 +1,1 @@
-type Mode = "CREATE" | "UPDATE" | "VIEW";
-
-export { Mode };
+export type Mode = "CREATE" | "UPDATE" | "VIEW";

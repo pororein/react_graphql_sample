@@ -1,8 +1,13 @@
 import actions from "./actions";
+import menubarActions from "../menubar/actions";
+import type { UserAction } from "../menubar/types";
 import selectors from "./selectors";
+import type { User } from "../../../types/index";
 import type { Action, LoginInfo } from "./types";
 import { push } from "connected-react-router";
 import { put, call, take, fork, select } from "redux-saga/effects";
+import graphqlClient from "../../../common/graphql/client";
+import authQuery from "../../../common/graphql/queries/auth";
 
 const updateId = (id: string): Action => {
     return actions.updateId(id);
@@ -37,33 +42,41 @@ const success = (): Action => {
     return actions.success();
 };
 
-// 本来は通信処理だが、画面遷移確認の為非同期sleepしてから適当な文字列を返す
-function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout( resolve, ms));
+const updateUser = (user: User): UserAction => {
+    return menubarActions.updateUser(user);
 }
 
-async function dummyFetch(loginInfo: LoginInfo): Promise<string> {
-    await sleep(3000);
+async function authFetch(loginInfo: LoginInfo): Promise<User> {
 
-    if (loginInfo.id != "test" || loginInfo.password != "test") {
-        return "failed";
+    const result = await graphqlClient.request(authQuery, loginInfo);
+
+    if (!result.userOne) {
+        throw new Error(`user not found`);
     }
 
-    return "compleate";
-}
+    let userInfo: User = {
+        id: result.userOne._id,
+        firstName: result.userOne.firstName,
+        lastName: result.userOne.lastName,
+        role: result.userOne.role,
+    }
+    
+    return userInfo;
+};
 
 function* handleLogin() {
     while (true) {
         const action = yield take("LOGIN"); 
         yield put(loggingIn());
-        // TODO: dummyFetchは実装時にfetch処理と取り換える
-        const loginInfo = yield select(selectors.getLoginInfo);
-        const result = yield call(dummyFetch, loginInfo); 
-        if (result == "compleate") {
+
+        try {
+            const loginInfo: LoginInfo = yield select(selectors.getLoginInfo);
+            const result: User = yield call(authFetch, loginInfo);
+            yield put(updateUser(result));
             yield put(success());
             yield put(cleaning());
             yield put(push('/console'));
-        } else {
+        } catch (err) {
             yield put(failed());
         }
     }

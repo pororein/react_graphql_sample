@@ -1,3 +1,1 @@
-type LoginStatus = "INIT" | "LOGGINGIN" | "FAILED" | "SUCCESS";
-
-export { LoginStatus };
+export type LoginStatus = "INIT" | "LOGGINGIN" | "FAILED" | "SUCCESS";
