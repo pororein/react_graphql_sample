@@ -7,7 +7,7 @@ module.exports = {
 
     // メインとなるJavaScriptファイル（エントリーポイント）
     entry: {
-        bundle: './src/index.tsx'
+        bundle: './src/frontend/index.tsx'
     },
     output: {
         path: path.join(__dirname, "dist"),
