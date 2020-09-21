@@ -9,12 +9,21 @@ const ReviewListModel = new Schema({
     tags: [String],
     checkListIds: [ObjectId],
     pointOutList: [ObjectId],
-    reviewMembers: [{
+    reviewerList: [{
+        _id: ObjectId,
+        role: Number
+    }],
+    revieweeList: [{
+        _id: ObjectId,
+        role: Number
+    }],
+    participantList: [{
         _id: ObjectId,
         role: Number
     }],
     status: Number,
-    scope: Number
+    scope: Number,
+    creator: String,
 });
 
 export default mongoose.model('review_list', ReviewListModel);

@@ -6,9 +6,9 @@ export type AuthQueryParameter = {
 }
 
 export default gql`
-    query ($id: String!, $password: String!) {
+    query ($eMailAddress: String!, $password: String!) {
         userOne(filter: {
-            eMailAddress: $id, 
+            eMailAddress: $eMailAddress, 
             password: $password
         }) {
             _id

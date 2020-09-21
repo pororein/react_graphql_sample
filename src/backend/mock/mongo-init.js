@@ -89,21 +89,12 @@ db.review_lists.insert({
         "testProject"
     ],
     checkListIds: [
-        1
     ],
-    pointOutList: [
-        1, 2
-    ],
-    reviewMembers: [
-        {
-            id: 1,
-            role: 1
-        },
-        {
-            id: 2,
-            role: 0
-        }
-    ],
+    pointOutList: [],
+    reviewerList: [],
+    revieweeList: [],
+    participantList: [],
     status: 0,
-    scope: 0
+    scope: 0,
+    creator: ''
 });
