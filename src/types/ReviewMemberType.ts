@@ -1,1 +1,0 @@
-export enum ReviewMemberType { REVIEWEE, REVIEWER, PARTICIPANT };
