@@ -270,7 +270,7 @@ package types {
     }
 
     class LoginInfo {
-        String id
+        String eMailAddress
         String password
     }
 
@@ -285,7 +285,7 @@ package types {
     }
 
     class User {
-        String id
+        String _id
         String eMailAddress
         String firstName
         String lastName
@@ -324,7 +324,7 @@ package types {
     }
 
     class PointOut {
-        String id
+        String _id
         String title
         String targetPosition
         String detail
@@ -332,29 +332,31 @@ package types {
     }
 
     class ReviewMember {
-        User member
+        String _id
         ReviewMemberType memberType
     }
 
     class ReviewInfo {
-        String id
+        String _id
         String title
         String documentPath
         String[] tags
         String[] checkListIds
         PointOut[] pointOutList
-        ReviewMember[] reviewMembers
+        ReviewMember[] reviewerList
+        ReviewMember[] revieweeList
+        ReviewMember[] participantList
         ReviewStatus status
         Scope scope
     }
 
     class ProjectMember {
-        User user
+        String _id
         ProjectRole role
     }
 
     class ProjectInfo {
-        String id
+        String _id
         ProjectMember[] members
         String detail
         ReviewInfo[] reviewList
@@ -362,20 +364,20 @@ package types {
     }
 
     class CheckItem {
-        String id
+        String _id
         String title
         String detail
         Boolean performed
     }
 
     class CheckList {
-        String id
+        String _id
         String title
         CheckItem[] items
     }
 
     class Column {
-        String id
+        String _id
         String name
     }
 }
