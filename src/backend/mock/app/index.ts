@@ -10,9 +10,14 @@ const app = express();
 
 dbClient.connect();
 
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.text({ type: 'application/graphql' }))
 app.use(bodyParser.json());
 app.use(cors());
+
+app.get("/", (res, req, next) => {
+    req.sendFile('index.html');
+});
 
 app.use(
     "/graphql",
