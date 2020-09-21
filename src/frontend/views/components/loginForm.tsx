@@ -43,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
 
 export type Props = {
   state: loginFormTypes.Status,
-  onChangeId: (id: string) => void,
+  onChangeEMail: (eMailAddress: string) => void,
   onChangePassword: (password: string) => void,
   login: () => void,
 };
 
-export default function loginForm({ state, onChangeId, onChangePassword, login }: Props): JSX.Element {
+export default function loginForm({ state, onChangeEMail, onChangePassword, login }: Props): JSX.Element {
 
   const classes = useStyles();
 
@@ -75,7 +75,7 @@ export default function loginForm({ state, onChangeId, onChangePassword, login }
                     </InputAdornment>
                   ),
                 }}
-                  onChange={(event) => onChangeId(event.target.value)}
+                  onChange={(event) => onChangeEMail(event.target.value)}
                   error={(state == "FAILED")}
                 />
               </Box>

@@ -9,8 +9,8 @@ const initLoginInfo: LoginInfo = {
 
 const initState: Status = "INIT";
 
-function updateId(loginInfo: LoginInfo, id: string): LoginInfo {
-    return Object.assign({}, loginInfo, { id: id });
+function updateEMail(loginInfo: LoginInfo, eMailAddress: string): LoginInfo {
+    return Object.assign({}, loginInfo, { eMailAddress: eMailAddress });
 };
 
 function updatePassword(loginInfo: LoginInfo, password: string): LoginInfo {
@@ -25,8 +25,8 @@ const loginInfo = (state: LoginInfo = initLoginInfo, action: Action): LoginInfo 
     switch (action.type) {
         case "LOGIN":
             return state;
-        case "UPDATEID":
-            return updateId(state, action.id);
+        case "UPDATEEMAIL":
+            return updateEMail(state, action.eMailAddress);
         case "UPDATEPASSWORD":
             return updatePassword(state, action.password);
         case "CLEANING":

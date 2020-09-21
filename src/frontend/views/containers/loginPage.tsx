@@ -13,8 +13,8 @@ const mapDispatchToProps = (dispatch: loginFormTypes.Dispatch) => {
         login: () => {
             dispatch(operations.login());
         },
-        onChangeId: (id: string) => {
-            dispatch(operations.updateId(id));
+        onChangeEMail: (eMailAddress: string) => {
+            dispatch(operations.updateEMail(eMailAddress));
         },
         onChangePassword: (password: string) => {
             dispatch(operations.updatePassword(password));

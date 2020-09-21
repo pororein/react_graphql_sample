@@ -4,7 +4,7 @@ import type { LoginInfo, LoginStatus } from "../../../types";
 type LoginInfoType = "ID" | "PASSWORD";
 
 type Action = { type: "LOGIN" }
-    | { type: "UPDATEID", id: string }
+    | { type: "UPDATEEMAIL", eMailAddress: string }
     | { type: "UPDATEPASSWORD", password: string }
     | { type: "CLEANING", loginInfo: LoginInfo }
     | { type: "LOGGINGIN", status: "LOGGINGIN" }

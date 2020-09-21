@@ -9,8 +9,8 @@ import { put, call, take, fork, select } from "redux-saga/effects";
 import graphqlClient from "../../../../common/graphql/client";
 import authQuery from "../../../../common/graphql/queries/auth";
 
-const updateId = (id: string): Action => {
-    return actions.updateId(id);
+const updateEMail = (eMailAddress: string): Action => {
+    return actions.updateEMail(eMailAddress);
 }
 
 const updatePassword = (password: string): Action => {
@@ -82,7 +82,7 @@ function* rootSaga() {
 }
 
 export default {
-    updateId,
+    updateEMail,
     updatePassword,
     login,
     cleaning,

@@ -6,10 +6,10 @@ const STATUS_LOGGINGIN: Status = "LOGGINGIN";
 const STATUS_FAILED: Status = "FAILED";
 const STATUS_SUCCESS: Status = "SUCCESS";
 
-export const updateId = (id: string): Action => {
+export const updateEMail = (eMailAddress: string): Action => {
     return {
-        type: "UPDATEID",
-        id: id,
+        type: "UPDATEEMAIL",
+        eMailAddress: eMailAddress,
     }
 };
 
@@ -55,7 +55,7 @@ export const success = (): Action => {
 }
 
 export default {
-    updateId,
+    updateEMail,
     updatePassword,
     login,
     cleaning,
