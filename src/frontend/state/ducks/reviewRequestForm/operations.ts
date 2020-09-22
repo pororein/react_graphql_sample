@@ -263,6 +263,8 @@ function* handleCreateReviewRequest() {
 
         try {
             const reviewInfo: ReviewInfo = yield select(selectors.getReviewInfo);
+            const user: User = yield select(menubarSelectors.getUser);
+            reviewInfo.creator = user._id;
             yield call(putReviewInfoFetch, reviewInfo);
             yield put(menubarOperations.showReviewList());
         } catch (e) {
