@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ObjectID } from 'mongodb';
 
 const Schema = mongoose.Schema;
 
@@ -7,19 +7,33 @@ const ReviewListModel = new Schema({
     title: String,
     documentPath: String,
     tags: [String],
-    checkListIds: [ObjectId],
+    checkLists: [{
+        _id: ObjectID,
+        title: String,
+        items: [{
+            title: String,
+            detail: String,
+            performed: Boolean
+        }],
+    }],
     pointOutList: [ObjectId],
     reviewerList: [{
         _id: ObjectId,
-        role: Number
+        eMailAddress: String,
+        firstName: String,
+        lastName: String,
     }],
     revieweeList: [{
         _id: ObjectId,
-        role: Number
+        eMailAddress: String,
+        firstName: String,
+        lastName: String,
     }],
     participantList: [{
         _id: ObjectId,
-        role: Number
+        eMailAddress: String,
+        firstName: String,
+        lastName: String,
     }],
     status: Number,
     scope: Number,

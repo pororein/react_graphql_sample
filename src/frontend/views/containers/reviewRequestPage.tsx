@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { reviewRequestFormSelectors, reviewRequestFormTypes } from "../../state/ducks/reviewRequestForm";
 import reviewRequestForm from "../components/reviewRequestForm";
 import operations from "../../state/ducks/reviewRequestForm/operations";
-import { ReviewMember, Scope } from "../../types";
+import { ReviewMember, Scope, User, CheckList } from "../../types";
 import { withRouter } from "react-router-dom";
 
 const mapStateToProps = (state: any) => ({
@@ -20,14 +20,14 @@ const mapDispatchToProps = (dispatch: reviewRequestFormTypes.Dispatch) => {
         onChangeTag: (index: number, tag: string) => {
             dispatch(operations.updateReviewTag(index, tag));
         },
-        onChangeReviewee: (index: number, id: string) => {
-            dispatch(operations.updateReviewee(index, id));
+        onChangeReviewee: (members: User[]) => {
+            dispatch(operations.updateRevieweeList(members));
         },
-        onChangeReviewer: (index: number, id: string) => {
-            dispatch(operations.updateReviewer(index, id));
+        onChangeReviewer: (members: User[]) => {
+            dispatch(operations.updateReviewerList(members));
         },
-        onChangeCheckList: (index: number, id: string) => {
-            dispatch(operations.updateReviewCheckList(index, id));
+        onChangeCheckList: (checkList: CheckList[]) => {
+            dispatch(operations.updateReviewCheckList(checkList));
         },
         onChangeScope: (scope: number) => {
             dispatch(operations.updateReviewScope(scope));

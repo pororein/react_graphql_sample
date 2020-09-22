@@ -7,7 +7,7 @@ const initialState: ReviewRequestFormState = {
         tags: [],
         revieweeList: [],
         reviewerList: [],
-        checkListIds: [],
+        checkLists: [],
         scope: 0,
     },
     checkLists: [],
@@ -43,7 +43,7 @@ const state = (state: ReviewRequestFormState = initialState, action: Action): Re
         case 'UPDATE_PARTICIPANT_LIST':
             return changeReviewInfo(state, { participantList: action.members });
         case 'UPDATE_CHECK_LISTS':
-            return changeReviewInfo(state, { checkListIds: action.checkLists });
+            return changeReviewInfo(state, { checkLists: action.checkLists });
         case 'UPDATE_SCOPE':
             return changeReviewInfo(state, { scope: action.scope });
         case 'UPDATE_REVIEW_TITLE':

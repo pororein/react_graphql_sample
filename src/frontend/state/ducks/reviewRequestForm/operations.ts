@@ -31,32 +31,16 @@ const updateRevieweeList = (members: ReviewMember[]): Action => {
     return actions.updateRevieweeList(members);
 };
 
-const updateReviewee = (index: number, id: string): Action => {
-    return actions.updateReviewee(index, id);
-};
-
 const updateReviewerList = (members: ReviewMember[]): Action => {
     return actions.updateReviewerList(members);
-};
-
-const updateReviewer = (index: number, id: string): Action => {
-    return actions.updateReviewer(index, id);
 };
 
 const updateParticipantList = (members: ReviewMember[]): Action => {
     return actions.updateParticipantList(members);
 };
 
-const updateParticipant = (index: number, id: string): Action => {
-    return actions.updateParticipant(index, id);
-};
-
-const updateReviewCheckListIds = (checkLists: string[]): Action => {
-    return actions.updateReviewCheckListIds(checkLists);
-};
-
-const updateReviewCheckList = (index: number, checkListId: string): Action => {
-    return actions.updateReviewCheckList(index, checkListId);
+const updateReviewCheckList = (checkLists: CheckList[]): Action => {
+    return actions.updateReviewCheckList(checkLists);
 };
 
 const updateReviewScope = (scope: number): Action => {
@@ -98,120 +82,6 @@ function* handleUpdateTags() {
             }
 
             yield put(updateReviewTags(tags));
-        }
-    }
-}
-
-function* handleUpdateRevieweeList() {
-    while (true) {
-        const action = yield take("UPDATE_REVIEWEE");
-        
-        const reviewInfo: ReviewInfo = yield select(selectors.getReviewInfo);
-        let revieweeList = reviewInfo.revieweeList;
-
-        if (!revieweeList) {
-            // 何もしない
-        } else {
-
-            let reviewee: ReviewMember = {
-                _id: action.id,
-                memberType: ReviewMemberType.REVIEWEE
-            }
-
-            if (action.id == "none") {
-                revieweeList.splice(action.index, 1);
-            } else if (action.index == revieweeList.length) {
-                revieweeList.push(reviewee);
-            } else if (action.index < revieweeList.length) {
-                revieweeList[action.index] = reviewee;
-            }
-
-            yield put(updateRevieweeList(revieweeList));
-        }
-    }
-}
-
-function* handleUpdateReviewerList() {
-    while (true) {
-        const action = yield take("UPDATE_REVIEWER");
-        
-        const reviewInfo: ReviewInfo = yield select(selectors.getReviewInfo);
-        let reviewerList = reviewInfo.reviewerList;
-
-        if (!reviewerList) {
-            // 何もしない
-        } else {
-
-            let reviewer: ReviewMember = {
-                _id: action.id,
-                memberType: ReviewMemberType.REVIEWER
-            }
-
-            if (action.id == "none") {
-                reviewerList.splice(action.index, 1);
-            } else if (action.index == reviewerList.length) {
-                reviewerList.push(reviewer);
-            } else if (action.index < reviewerList.length) {
-                reviewerList[action.index] = reviewer;
-            }
-
-            yield put(updateReviewerList(reviewerList));
-
-        }
-    }
-}
-
-function* handleUpdateParticipantList() {
-    while (true) {
-        const action = yield take("UPDATE_PARTICIPANT");
-        
-        const reviewInfo: ReviewInfo = yield select(selectors.getReviewInfo);
-        let participantList = reviewInfo.participantList;
-
-        if (!participantList) {
-            // 何もしない
-        } else {
-
-            let participant: ReviewMember = {
-                _id: action.id,
-                memberType: ReviewMemberType.PARTICIPANT
-            }
-
-            if (action.id == "none") {
-                participantList.splice(action.index, 1);
-            } else if (action.index == participantList.length) {
-                participantList.push(participant);
-            } else if (action.index < participantList.length) {
-                participantList[action.index] = participant;
-            }
-
-            yield put(updateParticipantList(participantList));
-
-        }
-    }
-}
-
-function* handleUpdateReviewCheckList() {
-    while (true) {
-        const action = yield take("UPDATE_CHECK_LIST");
-        
-        const reviewInfo: ReviewInfo = yield select(selectors.getReviewInfo);
-        let checkListIds = reviewInfo.checkListIds;
-
-        if (!checkListIds) {
-            // 何もしない
-        } else {
-
-            if (action.checkList == "none") {
-                checkListIds.splice(action.index, 1);
-            } else if (action.index == checkListIds.length) {
-                checkListIds.push(action.checkList);
-            } else if (action.index < checkListIds.length) {
-                checkListIds[action.index] = action.checkList;
-            }
-
-            yield put(updateReviewCheckListIds(checkListIds));
-
         }
     }
 }
@@ -275,12 +145,8 @@ function* handleCreateReviewRequest() {
 
 function* rootSaga() {
     yield fork(handleUpdateTags);
-    yield fork(handleUpdateRevieweeList);
-    yield fork(handleUpdateReviewerList);
-    yield fork(handleUpdateParticipantList);
-    yield fork(handleUpdateReviewCheckList);
-    yield fork(handleGetSelectList);
     yield fork(handleCreateReviewRequest);
+    yield fork(handleGetSelectList);
 }
 
 export default {
@@ -289,12 +155,8 @@ export default {
     updateReviewTags,
     updateReviewTag,
     updateRevieweeList,
-    updateReviewee,
     updateReviewerList,
-    updateReviewer,
     updateParticipantList,
-    updateParticipant,
-    updateReviewCheckListIds,
     updateReviewCheckList,
     updateReviewScope,
     createReview,

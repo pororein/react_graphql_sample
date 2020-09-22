@@ -21,32 +21,16 @@ export const updateRevieweeList = (members: ReviewMember[]): Action => {
     return { type: "UPDATE_REVIEWEE_LIST", members: members };
 };
 
-export const updateReviewee = (index: number, id: string): Action => {
-    return { type: "UPDATE_REVIEWEE", index: index, id: id };
-};
-
 export const updateReviewerList = (members: ReviewMember[]): Action => {
     return { type: "UPDATE_REVIEWER_LIST", members: members };
-};
-
-export const updateReviewer = (index: number, id: string): Action => {
-    return { type: "UPDATE_REVIEWER", index: index, id: id };
 };
 
 export const updateParticipantList = (members: ReviewMember[]): Action => {
     return { type: "UPDATE_PARTICIPANT_LIST", members: members };
 };
 
-export const updateParticipant = (index: number, id: string): Action => {
-    return { type: "UPDATE_PARTICIPANT", index: index, id: id };
-};
-
-export const updateReviewCheckListIds = (checkLists: string[]): Action => {
+export const updateReviewCheckList = (checkLists: CheckList[]): Action => {
     return { type: "UPDATE_CHECK_LISTS", checkLists: checkLists };
-};
-
-export const updateReviewCheckList = (index: number, checkList: string): Action => {
-    return { type: "UPDATE_CHECK_LIST", index: index, checkList: checkList };
 };
 
 export const updateReviewScope = (scope: number): Action => {
@@ -75,12 +59,8 @@ export default {
     updateReviewTags,
     updateReviewTag,
     updateRevieweeList,
-    updateReviewee,
     updateReviewerList,
-    updateReviewer,
     updateParticipantList,
-    updateParticipant,
-    updateReviewCheckListIds,
     updateReviewCheckList,
     updateReviewScope,
     createReview,

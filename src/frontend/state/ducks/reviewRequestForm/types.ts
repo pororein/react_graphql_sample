@@ -5,14 +5,10 @@ type Action = { type: 'UPDATE_REVIEW_TITLE', title: string } |
                 { type: 'UPDATE_REVIEW_DOC_PATH', path: string } |
                 { type: 'UPDATE_REVIEW_TAGS', tags: string[] } |
                 { type: 'UPDATE_REVIEW_TAG', index: number, tag: string } |
-                { type: 'UPDATE_REVIEWEE_LIST', members: ReviewMember[] } |
-                { type: 'UPDATE_REVIEWEE', index: number, id: string } |
-                { type: 'UPDATE_REVIEWER_LIST', members: ReviewMember[] } |
-                { type: 'UPDATE_REVIEWER', index: number, id: string } |
-                { type: 'UPDATE_PARTICIPANT_LIST', members: ReviewMember[] } |
-                { type: 'UPDATE_PARTICIPANT', index: number, id: string } |
-                { type: 'UPDATE_CHECK_LISTS', checkLists: string[] } |
-                { type: 'UPDATE_CHECK_LIST', index: number, checkList: string} |
+                { type: 'UPDATE_REVIEWEE_LIST', members: User[] } |
+                { type: 'UPDATE_REVIEWER_LIST', members: User[] } |
+                { type: 'UPDATE_PARTICIPANT_LIST', members: User[] } |
+                { type: 'UPDATE_CHECK_LISTS', checkLists: CheckList[] } |
                 { type: 'UPDATE_SCOPE', scope: number } |
                 { type: 'CREATE_REVIEW_REQUEST' } | 
                 { type: 'GET_SELECT_LIST' } |

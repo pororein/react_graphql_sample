@@ -9,7 +9,9 @@ import TextField from "@material-ui/core/TextField";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Chip from '@material-ui/core/Chip';
 import { reviewRequestFormTypes } from "../../state/ducks/reviewRequestForm";
 import { User, Scope } from "../../types";
 import { CheckList } from '../../types/CheckList';
@@ -20,9 +22,9 @@ export type Props = {
     onChangeTitle: (title: string) => void
     onChangeDocPath: (path: string) => void
     onChangeTag: (index: number, tag: string) => void
-    onChangeReviewee: (index: number, id: string) => void
-    onChangeReviewer: (index: number, id: string) => void
-    onChangeCheckList: (index: number, id: string) => void
+    onChangeReviewee: (members: User[]) => void
+    onChangeReviewer: (members: User[]) => void
+    onChangeCheckList: (checkLsit: CheckList[]) => void
     onChangeScope: (scope: number) => void
     onHandleClickCreate: () => void
 };
@@ -71,39 +73,6 @@ function rednerTagFields(
     return renderList;
 }
 
-function rednerMemberSelectors(
-    className: string,
-    valueList: ReviewMember[],
-    labelId: string,
-    userList: User[],
-    changeHandler: (index: number, value: string) => void): JSX.Element[] {
-    
-    let renderList: JSX.Element[] = [];
-
-    for (let i = 0; i <= valueList.length; i++) {
-        let value = i == valueList.length ? 'none' : valueList[i]._id;
-
-        renderList.push(
-            <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                <Select
-                    className={className}
-                    key={`member-selector-${i}`}
-                    labelId={labelId}
-                    value={value}
-                    onChange={(event: React.ChangeEvent<{value: unknown}>) => changeHandler(i, event.target.value as string)}
-                >
-                    <MenuItem key={`member-item-none`} value={"none"}>-</MenuItem>
-                        {userList.map((user, index) => {
-                            return <MenuItem key={`member-item-${index}`} value={user._id}>{`${user.firstName} ${user.lastName}`}</MenuItem>
-                        })}
-                </Select>
-            </Box>
-        );
-    }
-
-    return renderList;
-}
-
 function rednerCheckListSelectors(
     className: string,
     valueList: string[],
@@ -117,18 +86,13 @@ function rednerCheckListSelectors(
 
         renderList.push(
             <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                <Select
-                    className={className}
+                <Autocomplete
                     key={`checklist-selector-${i}`}
-                    labelId="review-reques-checklistIds-label"
-                    value={value}
-                    onChange={(event: React.ChangeEvent<{value: unknown}>) => changeHandler(i, event.target.value as string)}
-                >
-                    <MenuItem key={`checklist-item-none`} value={"none"}>-</MenuItem>
-                    {checkLists.map((checkList, index) => {
-                        return <MenuItem key={`checklist-item-${index}`} value={checkList._id!}>{`${checkList.title!}`}</MenuItem>
-                    })}
-                </Select>
+                    options={checkLists}
+                    getOptionLabel={(option: CheckList) => `${option.title}`}
+                    onChange={(event, value: CheckList | null, reason) => { changeHandler(i, (!value ? 'none' : value!._id!)) }}
+                    renderInput={(params) => <TextField {...params} label={`checkList`} variant="outlined" />}
+                />
             </Box>
         );
     }
@@ -178,42 +142,83 @@ export default function reviewRequestForm({
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent>
-                            <InputLabel id="review-request-reviewer-label">レビュアー</InputLabel>
-                            {
-                                rednerMemberSelectors(
-                                    classes.textField,
-                                    state.reviewInfo!.reviewerList!,
-                                    "review-request-reviewer-label",
-                                    state.userList!,
-                                    onChangeReviewer
-                                )
-                            }
+                            <Autocomplete
+                                multiple
+                                value={state.reviewInfo!.reviewerList!}
+                                onChange={(event, newValue) => {
+                                    onChangeReviewer(
+                                        newValue,
+                                    );
+                                }}
+                                options={state.userList!}
+                                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Chip
+                                            label={`${option.lastName} ${option.firstName}`}
+                                            {...getTagProps({ index })}
+                                            disabled={!state.reviewInfo!.reviewerList!.find((member) => { option._id! === member._id! }) ? false : true }
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField {...params} className={classes.textField} label="レビュアー" />
+                                )}
+                            />
                         </CardContent>
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent>
-                        <InputLabel id="review-request-reviewee-label">レビューイ</InputLabel>
-                        {
-                            rednerMemberSelectors(
-                                classes.textField,
-                                state.reviewInfo!.revieweeList!,
-                                "review-request-reviewee-label",
-                                state.userList!,
-                                onChangeReviewee
-                            )
-                        }
+                            <Autocomplete
+                                multiple
+                                value={state.reviewInfo!.revieweeList!}
+                                onChange={(event, newValue) => {
+                                    onChangeReviewee(
+                                        newValue,
+                                    );
+                                }}
+                                options={state.userList!}
+                                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Chip
+                                            label={`${option.lastName} ${option.firstName}`}
+                                            {...getTagProps({ index })}
+                                            disabled={!state.reviewInfo!.revieweeList!.find((member) => { option._id! === member._id! }) ? false : true }
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField {...params} className={classes.textField} label="レビューイ" />
+                                )}
+                            />
                         </CardContent>
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent>
-                            <InputLabel id="review-request-checklist-label">チェックリスト</InputLabel>
-                            {
-                                rednerCheckListSelectors(
-                                    classes.textField,
-                                    state.reviewInfo!.checkListIds!,
-                                    state.checkLists!,
-                                    onChangeCheckList)
-                            }
+                            <Autocomplete
+                                multiple
+                                value={state.reviewInfo!.checkLists!}
+                                onChange={(event, newValue) => {
+                                    onChangeCheckList(
+                                        newValue,
+                                    );
+                                }}
+                                options={state.checkLists!}
+                                getOptionLabel={(option) => `${option.title}`}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Chip
+                                            label={`${option.title}`}
+                                            {...getTagProps({ index })}
+                                            disabled={!state.reviewInfo!.checkLists!.find((checkList) => { option._id! === checkList._id! }) ? false : true }
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField {...params} className={classes.textField} label="チェックリスト" />
+                                )}
+                            />
                         </CardContent>
                     </Box>
                     <Box display="flex" mx="auto" marginTop="20px" justifyContent="center" alignItems="center">

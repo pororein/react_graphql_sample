@@ -88,8 +88,7 @@ db.review_lists.insert({
         "test",
         "testProject"
     ],
-    checkListIds: [
-    ],
+    checkLists: [],
     pointOutList: [],
     reviewerList: [],
     revieweeList: [],
