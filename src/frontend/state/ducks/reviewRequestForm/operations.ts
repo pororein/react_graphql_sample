@@ -9,7 +9,7 @@ import getAllCheckListQuery from "../../../../common/graphql/queries/getAllCheck
 import createReviewInfoQuery, { CreateReviewInfoQueryType } from "../../../../common/graphql/queries/createReviewInfo";
 import graphqlClient from "../../../../common/graphql/client";
 import { ReviewMemberType } from '../../../types/ReviewMemberType';
-import { menubarOperations } from '../menubar';
+import { menubarOperations, menubarSelectors } from '../menubar';
 
 const updateReviewTitle = (title: string): Action => {
     return actions.updateReviewTitle(title);

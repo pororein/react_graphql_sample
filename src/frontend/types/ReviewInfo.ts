@@ -16,4 +16,5 @@ export type ReviewInfo = {
     participantList?: ReviewMember[],
     status?: ReviewStatus,
     scope?: number,
+    creator?: string,
 };

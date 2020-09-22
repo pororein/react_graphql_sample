@@ -348,6 +348,7 @@ package types {
         ReviewMember[] participantList
         ReviewStatus status
         Scope scope
+        String creator
     }
 
     class ProjectMember {
