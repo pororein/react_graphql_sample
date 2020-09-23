@@ -11,7 +11,8 @@ const initialState: ReviewRequestFormState = {
         scope: 0,
     },
     checkLists: [],
-    userList: []
+    userList: [],
+    status: ''
 };
 
 function changeUserList(orgState: ReviewRequestFormState, updateUserList: User[]): ReviewRequestFormState {
@@ -25,6 +26,10 @@ function changeCheckLists(orgState: ReviewRequestFormState, updateCheckLists: Ch
 function changeReviewInfo(orgState: ReviewRequestFormState, updateReviewInfo: ReviewInfo): ReviewRequestFormState {
     let mergedReviewInfo: ReviewInfo = Object.assign({}, orgState.reviewInfo, updateReviewInfo);
     return Object.assign({}, orgState, { reviewInfo: mergedReviewInfo });
+}
+
+function changeStatus(orgState: ReviewRequestFormState, updateStatus: string): ReviewRequestFormState {
+    return Object.assign({}, orgState, { status: updateStatus });
 }
 
 
@@ -52,6 +57,10 @@ const state = (state: ReviewRequestFormState = initialState, action: Action): Re
             return changeCheckLists(state, action.checkLists);
         case 'GET_USERS':
             return changeUserList(state, action.users);
+        case 'CREATE_REVIEW_SUCCESSFUL':
+            return changeStatus(state, action.status);
+        case 'CREATE_REVIEW_FAILED':
+            return changeStatus(state, action.status);
         default:
             return state;
     }

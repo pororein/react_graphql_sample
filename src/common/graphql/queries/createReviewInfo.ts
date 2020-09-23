@@ -4,8 +4,10 @@ export type CreateReviewInfoQueryType = {
     title: string
     path: string
     tags?: string[]
-    checkLists?: string[]
-    members: { _id: string, role: number }[]
+    checkLists?: { _id: string, title: string}[]
+    reviewerList: { _id: string, firstName: string, lastName: string, eMailAddress: string }[]
+    revieweeList: { _id: string, firstName: string, lastName: string, eMailAddress: string }[]
+    participantList: { _id: string, firstName: string, lastName: string, eMailAddress: string }[]
     status: number
     scope: number
 }
@@ -13,7 +15,7 @@ export type CreateReviewInfoQueryType = {
 export default gql`
     mutation(
         $title: String,
-        $path: String,
+        $documentPath: String,
         $tags: [String],
         $checkLists: [review_listCheckListsInput],
         $reviewerList: [review_listReviewerListInput],
@@ -26,7 +28,7 @@ export default gql`
         reviewListCreate(
             record: {
                 title: $title
-                documentPath: $path
+                documentPath: $documentPath
                 tags: $tags
                 checkLists: $checkLists
                 reviewerList: $reviewerList

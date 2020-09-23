@@ -13,12 +13,15 @@ type Action = { type: 'UPDATE_REVIEW_TITLE', title: string } |
                 { type: 'CREATE_REVIEW_REQUEST' } | 
                 { type: 'GET_SELECT_LIST' } |
                 { type: 'GET_CHECK_LISTS', checkLists: CheckList[] } |
-                { type: 'GET_USERS', users: User[] };
+                { type: 'GET_USERS', users: User[] } |
+                { type: 'CREATE_REVIEW_SUCCESSFUL', status: 'SUCCESS' } |
+                { type: 'CREATE_REVIEW_FAILED', status: 'FAILED' };
 
 type ReviewRequestFormState = {
     reviewInfo?: ReviewInfo
     checkLists?: CheckList[]
     userList?: User[]
+    status: '' | 'SUCCESS' | 'FAILED'
 }
 
 type Store = ReduxStore<ReviewInfo, Action>;

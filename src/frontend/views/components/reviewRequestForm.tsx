@@ -21,7 +21,7 @@ export type Props = {
     state: reviewRequestFormTypes.ReviewRequestFormState
     onChangeTitle: (title: string) => void
     onChangeDocPath: (path: string) => void
-    onChangeTag: (index: number, tag: string) => void
+    onChangeTags: (tags: string[]) => void
     onChangeReviewee: (members: User[]) => void
     onChangeReviewer: (members: User[]) => void
     onChangeCheckList: (checkLsit: CheckList[]) => void
@@ -52,59 +52,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function rednerTagFields(
-    className: string,
-    fieldSize: number,
-    changeHandler: (index: number, value: string) => void): JSX.Element[] {
-    
-    let renderList: JSX.Element[] = [];
-
-    for (let i = 0; i <= fieldSize; i++) {
-        renderList.push(
-            <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                <TextField
-                    className={className}
-                    key={`tag-field-${i}`}
-                    onChange={event => { changeHandler(i, event.target.value) }} />
-            </Box>
-        );
-    }
-
-    return renderList;
-}
-
-function rednerCheckListSelectors(
-    className: string,
-    valueList: string[],
-    checkLists: CheckList[],
-    changeHandler: (index: number, value: string) => void): JSX.Element[] {
-    
-    let renderList: JSX.Element[] = [];
-
-    for (let i = 0; i <= valueList.length; i++) {
-        let value = i == valueList.length ? 'none' : valueList[i];
-
-        renderList.push(
-            <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                <Autocomplete
-                    key={`checklist-selector-${i}`}
-                    options={checkLists}
-                    getOptionLabel={(option: CheckList) => `${option.title}`}
-                    onChange={(event, value: CheckList | null, reason) => { changeHandler(i, (!value ? 'none' : value!._id!)) }}
-                    renderInput={(params) => <TextField {...params} label={`checkList`} variant="outlined" />}
-                />
-            </Box>
-        );
-    }
-
-    return renderList;
-}
-
 export default function reviewRequestForm({
     state,
     onChangeTitle,
     onChangeDocPath,
-    onChangeTag,
+    onChangeTags,
     onChangeReviewee,
     onChangeReviewer,
     onChangeCheckList,
@@ -136,8 +88,33 @@ export default function reviewRequestForm({
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent>
-                            <InputLabel id="review-request-tags-label">タグ</InputLabel>
-                            {rednerTagFields(classes.textField, state.reviewInfo!.tags!.length, onChangeTag)}
+                            <Autocomplete
+                                multiple
+                                value={state.reviewInfo!.tags!}
+                                onChange={(event, newValue) => {
+                                    onChangeTags(
+                                        newValue,
+                                    );
+                                }}
+                                freeSolo
+                                options={state.reviewInfo!.tags!}
+                                getOptionLabel={(option) => `${option}`}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Chip
+                                            label={`${option}`}
+                                            {...getTagProps({ index })}
+                                            disabled={!state.reviewInfo!.tags!.find((tag) => { option === tag }) ? false : true }
+                                        />
+                                    ))
+                                }
+                                selectOnFocus
+                                clearOnBlur
+                                handleHomeEndKeys
+                                renderInput={(params) => (
+                                    <TextField {...params} className={classes.textField} label="タグ" />
+                                )}
+                            />
                         </CardContent>
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">

@@ -23,10 +23,6 @@ const updateReviewTags = (tags: string[]): Action => {
     return actions.updateReviewTags(tags);
 };
 
-const updateReviewTag = (index: number, tag: string): Action => {
-    return actions.updateReviewTag(index, tag);
-};
-
 const updateRevieweeList = (members: ReviewMember[]): Action => {
     return actions.updateRevieweeList(members);
 };
@@ -61,6 +57,14 @@ const getUsers = (users: User[]): Action => {
 
 const getRequest = (): Action => {
     return actions.getRequest();
+};
+
+const updateStateSuccessful = (): Action => {
+    return actions.updateStateSuccessful();
+};
+
+const updateStateFailed = (): Action => {
+    return actions.updateStateFailed();
 };
 
 function* handleUpdateTags() {
@@ -138,7 +142,7 @@ function* handleCreateReviewRequest() {
             yield call(putReviewInfoFetch, reviewInfo);
             yield put(menubarOperations.showReviewList());
         } catch (e) {
-            
+            console.dir(e);
         }
     }
 }
@@ -153,7 +157,6 @@ export default {
     updateReviewTitle,
     updateReviewDocumentPath,
     updateReviewTags,
-    updateReviewTag,
     updateRevieweeList,
     updateReviewerList,
     updateParticipantList,
@@ -163,5 +166,7 @@ export default {
     getCheckList,
     getUsers,
     getRequest,
+    updateStateSuccessful,
+    updateStateFailed,
     rootSaga,
 }

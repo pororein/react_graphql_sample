@@ -53,6 +53,14 @@ export const getRequest = (): Action => {
     return { type: "GET_SELECT_LIST" };
 };
 
+export const updateStateSuccessful = (): Action => {
+    return { type: "CREATE_REVIEW_SUCCESSFUL", status: "SUCCESS" };
+};
+
+export const updateStateFailed = (): Action => {
+    return { type: "CREATE_REVIEW_FAILED", status: "FAILED" };
+};
+
 export default {
     updateReviewTitle,
     updateReviewDocumentPath,
@@ -67,4 +75,6 @@ export default {
     getCheckList,
     getUsers,
     getRequest,
+    updateStateSuccessful,
+    updateStateFailed,
 }

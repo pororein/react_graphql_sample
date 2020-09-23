@@ -17,8 +17,8 @@ const mapDispatchToProps = (dispatch: reviewRequestFormTypes.Dispatch) => {
         onChangeDocPath: (path: string) => {
             dispatch(operations.updateReviewDocumentPath(path));
         },
-        onChangeTag: (index: number, tag: string) => {
-            dispatch(operations.updateReviewTag(index, tag));
+        onChangeTags: (tags: string[]) => {
+            dispatch(operations.updateReviewTags(tags));
         },
         onChangeReviewee: (members: User[]) => {
             dispatch(operations.updateRevieweeList(members));

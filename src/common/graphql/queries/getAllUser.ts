@@ -7,7 +7,6 @@ export default gql`
             eMailAddress
             firstName
             lastName
-            role
         }
     }
 `;

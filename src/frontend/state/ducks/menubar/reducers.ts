@@ -14,7 +14,7 @@ function changeUser(orgContent: MenubarState, updateUserInfo: User): MenubarStat
     return Object.assign({}, orgContent, { user: updateUserInfo });
 }
 
-const content = (state: MenubarState = initialState, action: ContetsAction | UserAction): MenubarState => {
+const menubarReducer = (state: MenubarState = initialState, action: ContetsAction | UserAction): MenubarState => {
     switch (action.type) {
         case "SHOW_USER_LIST":
         case "CREATE_REVIEW":
@@ -30,9 +30,5 @@ const content = (state: MenubarState = initialState, action: ContetsAction | Use
             return state;
     }
 };
-
-const menubarReducer = combineReducers({
-    content: content,
-});
 
 export default menubarReducer;

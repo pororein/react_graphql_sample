@@ -13,7 +13,6 @@ export default gql `
                 performed
                 _id
             }
-            owner
         }
     }
 `;
