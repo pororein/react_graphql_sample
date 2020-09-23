@@ -13,10 +13,12 @@ export type CreateReviewInfoQueryType = {
 export default gql`
     mutation(
         $title: String,
-        $documentPath: String,
+        $path: String,
         $tags: [String],
-        $checkListIds: [MongoID],
-        $members: [review_listReviewMembersInput],
+        $checkLists: [review_listCheckListsInput],
+        $reviewerList: [review_listReviewerListInput],
+        $revieweeList: [review_listRevieweeListInput],
+        $participantList: [review_listParticipantListInput],
         $status: Float,
         $scope: Float,
         $creator: String
@@ -26,8 +28,10 @@ export default gql`
                 title: $title
                 documentPath: $path
                 tags: $tags
-                checkListIds: $checkListIds
-                reviewMembers: $members
+                checkLists: $checkLists
+                reviewerList: $reviewerList
+                revieweeList: $revieweeList
+                participantList: $participantList
                 status: $status
                 scope: $scope
                 creator: $creator
