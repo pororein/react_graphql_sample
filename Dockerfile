@@ -7,8 +7,6 @@ ENV MONGO_DB_NAME review_system
 ENV BACKEND_URL http://localhost:8080/
 
 # フロントエンドのソースをトランスパイル〜バンドルする
-WORKDIR /usr/reactApp/src/common
-COPY ./src/common/ /usr/reactApp/src/common
 WORKDIR /usr/reactApp/src/frontend
 COPY ./src/frontend/ /usr/reactApp/src/frontend
 

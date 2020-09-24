@@ -6,8 +6,8 @@ import type { User } from "../../../types/index";
 import type { Action, LoginInfo } from "./types";
 import { push } from "connected-react-router";
 import { put, call, take, fork, select } from "redux-saga/effects";
-import graphqlClient from "../../../../common/graphql/client";
-import authQuery from "../../../../common/graphql/queries/auth";
+import graphqlClient from "../../../common/graphql/client";
+import authQuery from "../../../common/graphql/queries/auth";
 
 const updateEMail = (eMailAddress: string): Action => {
     return actions.updateEMail(eMailAddress);
