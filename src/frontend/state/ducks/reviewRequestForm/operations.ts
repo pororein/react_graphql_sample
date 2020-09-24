@@ -10,6 +10,7 @@ import createReviewInfoQuery, { CreateReviewInfoQueryType } from "../../../../co
 import graphqlClient from "../../../../common/graphql/client";
 import { ReviewMemberType } from '../../../types/ReviewMemberType';
 import { menubarOperations, menubarSelectors } from '../menubar';
+import operations from "../loginForm/operations";
 
 const updateReviewTitle = (title: string): Action => {
     return actions.updateReviewTitle(title);
@@ -65,6 +66,14 @@ const updateStateSuccessful = (): Action => {
 
 const updateStateFailed = (): Action => {
     return actions.updateStateFailed();
+};
+
+const updateStateNone = (): Action => {
+    return actions.updateStateNone();
+};
+
+const initReviewInfo = (): Action => {
+    return actions.initReviewInfo();
 };
 
 function* handleUpdateTags() {
@@ -140,9 +149,11 @@ function* handleCreateReviewRequest() {
             const user: User = yield select(menubarSelectors.getUser);
             reviewInfo.creator = user._id;
             yield call(putReviewInfoFetch, reviewInfo);
-            yield put(menubarOperations.showReviewList());
+            yield put(initReviewInfo());
+            yield put(updateStateSuccessful());
         } catch (e) {
             console.dir(e);
+            yield put(updateStateFailed());
         }
     }
 }
@@ -168,5 +179,6 @@ export default {
     getRequest,
     updateStateSuccessful,
     updateStateFailed,
+    updateStateNone,
     rootSaga,
 }

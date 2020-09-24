@@ -35,6 +35,9 @@ const mapDispatchToProps = (dispatch: reviewRequestFormTypes.Dispatch) => {
         onHandleClickCreate: () => {
             dispatch(operations.createReview());
         },
+        onCloseAlert: () => {
+            dispatch(operations.updateStateNone());
+        },
     };
 };
 

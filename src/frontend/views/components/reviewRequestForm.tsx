@@ -12,6 +12,8 @@ import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from '@material-ui/core/Chip';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { reviewRequestFormTypes } from "../../state/ducks/reviewRequestForm";
 import { User, Scope } from "../../types";
 import { CheckList } from '../../types/CheckList';
@@ -27,6 +29,7 @@ export type Props = {
     onChangeCheckList: (checkLsit: CheckList[]) => void
     onChangeScope: (scope: number) => void
     onHandleClickCreate: () => void
+    onCloseAlert: () => void
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function reviewRequestForm({
     state,
     onChangeTitle,
@@ -61,7 +68,8 @@ export default function reviewRequestForm({
     onChangeReviewer,
     onChangeCheckList,
     onChangeScope,
-    onHandleClickCreate }: Props) {
+    onHandleClickCreate,
+    onCloseAlert }: Props) {
     
     const classes = useStyles();
 
@@ -78,12 +86,12 @@ export default function reviewRequestForm({
                     </Box>
                     <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent className={classes.cardContent}>
-                            <TextField className={classes.textField} label={"タイトル"} onChange={(event) => onChangeTitle(event.target.value as string)} />
+                            <TextField className={classes.textField} label={"タイトル"} value={state.reviewInfo!.title!} onChange={(event) => onChangeTitle(event.target.value as string)} />
                         </CardContent>
                     </Box>
                     <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
                         <CardContent className={classes.cardContent}>
-                            <TextField className={classes.textField} label={"ドキュメントURL"} onChange={(event) => onChangeDocPath(event.target.value as string)} />
+                            <TextField className={classes.textField} label={"ドキュメントURL"} value={state.reviewInfo!.documentPath!} onChange={(event) => onChangeDocPath(event.target.value as string)} />
                         </CardContent>
                     </Box>
                     <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
@@ -221,6 +229,16 @@ export default function reviewRequestForm({
                     </Box>
                 </Card>
             </Box>
+            <Snackbar open={(state.status == 'SUCCESS' ? true: false)} autoHideDuration={6000} onClose={onCloseAlert} >
+                <Alert severity="success" onClose={onCloseAlert}>
+                    Review Info Create Success!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={(state.status == 'FAILED' ? true: false)} autoHideDuration={6000} onClose={onCloseAlert} >
+                <Alert severity="error" onClose={onCloseAlert}>
+                    Review Info Create Failed
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }

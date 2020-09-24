@@ -61,6 +61,14 @@ export const updateStateFailed = (): Action => {
     return { type: "CREATE_REVIEW_FAILED", status: "FAILED" };
 };
 
+export const updateStateNone = (): Action => {
+    return { type: "CREATE_REVIEW_STATUS_INIT", status: "" };
+};
+
+export const initReviewInfo = (): Action => {
+    return { type: "CREATE_REVIEW_INFO_INIT" };
+};
+
 export default {
     updateReviewTitle,
     updateReviewDocumentPath,
@@ -77,4 +85,6 @@ export default {
     getRequest,
     updateStateSuccessful,
     updateStateFailed,
+    updateStateNone,
+    initReviewInfo,
 }

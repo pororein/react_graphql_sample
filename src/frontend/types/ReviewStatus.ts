@@ -1,1 +1,1 @@
-export type ReviewStatus = "NEW" | "REVIEWING" | "MODEFIED" | "FINISHED";
+export enum ReviewStatus { NEW, REVIEWING, MODEFIED, FINISHED };

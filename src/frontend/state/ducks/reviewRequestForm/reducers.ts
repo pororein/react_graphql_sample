@@ -4,10 +4,14 @@ import type { User, CheckList, ReviewInfo } from "../../../types";
 
 const initialState: ReviewRequestFormState = {
     reviewInfo: {
+        title: '',
+        documentPath: '',
         tags: [],
         revieweeList: [],
         reviewerList: [],
+        participantList: [],
         checkLists: [],
+        status: 0,
         scope: 0,
     },
     checkLists: [],
@@ -30,6 +34,10 @@ function changeReviewInfo(orgState: ReviewRequestFormState, updateReviewInfo: Re
 
 function changeStatus(orgState: ReviewRequestFormState, updateStatus: string): ReviewRequestFormState {
     return Object.assign({}, orgState, { status: updateStatus });
+}
+
+function initReviewInfo(orgState: ReviewRequestFormState): ReviewRequestFormState {
+    return Object.assign({}, orgState, { reviewInfo: initialState.reviewInfo });
 }
 
 
@@ -61,6 +69,10 @@ const state = (state: ReviewRequestFormState = initialState, action: Action): Re
             return changeStatus(state, action.status);
         case 'CREATE_REVIEW_FAILED':
             return changeStatus(state, action.status);
+        case 'CREATE_REVIEW_STATUS_INIT':
+            return changeStatus(state, action.status);
+        case 'CREATE_REVIEW_INFO_INIT':
+            return initReviewInfo(state);
         default:
             return state;
     }
