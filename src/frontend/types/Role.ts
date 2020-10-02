@@ -1,1 +1,1 @@
-export type Role = "ADMINISTRATOR" | "PROJECT_MANAGER" | "USER";
+export enum Role { ADMINISTRATOR, PROJECT_MANAGER, USER };

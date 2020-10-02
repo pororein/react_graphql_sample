@@ -46,7 +46,7 @@ const updateUser = (user: User): UserAction => {
     return menubarActions.updateUser(user);
 }
 
-async function authFetch(loginInfo: LoginInfo): Promise<User> {
+export async function authFetch(loginInfo: LoginInfo): Promise<User> {
 
     const result = await graphqlClient.request(authQuery, loginInfo);
 
@@ -59,7 +59,7 @@ async function authFetch(loginInfo: LoginInfo): Promise<User> {
     return userInfo;
 };
 
-function* handleLogin() {
+export function* handleLogin() {
     while (true) {
         const action = yield take("LOGIN"); 
         yield put(loggingIn());
