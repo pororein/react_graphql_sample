@@ -4,6 +4,7 @@ import { graphqlHTTP } from "express-graphql";
 import schema from "./graphql/schema";
 import dbClient from "./util/mongoDBClient";
 import cors from "cors";
+import mongoose from 'mongoose';
 
 const PORT = 8080;
 const app = express();
@@ -31,6 +32,20 @@ app.use(
     })
 );
 
-app.listen(PORT, () => {
-    console.log(`Started on port: ${PORT}`);
+let connection = mongoose.connection;
+
+connection.on('error', () => {
+    console.log('mongodb server connect failed');
+    console.log('retry connection...');
+
+    setTimeout(() => {
+        dbClient.connect();
+        connection = mongoose.connection;
+    }, 3000);
+});
+
+connection.once('open', () => {
+    app.listen(PORT, () => {
+        console.log(`Started on port: ${PORT}`);
+    });
 });
