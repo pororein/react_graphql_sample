@@ -18,7 +18,7 @@ function updatePassword(loginInfo: LoginInfo, password: string): LoginInfo {
 };
 
 function updateLoginInfo(original: LoginInfo, update: LoginInfo): LoginInfo {
-    return Object.assign({}, original, { id: update.eMailAddress, password: update.password });
+    return Object.assign({}, original, { eMailAddress: update.eMailAddress, password: update.password });
 };
 
 const loginInfo = (state: LoginInfo = initLoginInfo, action: Action): LoginInfo => {
