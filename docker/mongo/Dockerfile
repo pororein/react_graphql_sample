@@ -4,7 +4,7 @@ ENV MONGO_INITDB_ROOT_USERNAME root
 ENV MONGO_INITDB_ROOT_PASSWORD admin
 ENV MONGO_INITDB_DATABASE review_system
 
-COPY mongo-init.js /docker-entrypoint-initdb.d/
+COPY docker/mongo/mongo-init.js /docker-entrypoint-initdb.d/
 
 WORKDIR /home/mongodb
 
