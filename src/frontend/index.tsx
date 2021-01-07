@@ -3,9 +3,10 @@ import * as ReactDOM from "react-dom";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 import configureStore, { history } from "./state/store";
-import LoginPage from "./views/containers/loginPage";
+import LoginForm from "./views/components/loginForm";
 import ConsolePage from "./views/containers/consolePage";
 import { Provider as ReduxProvider } from "react-redux";
+import ROUTER_PATH from "./views/routerPath"; 
 
 const reduxStore = configureStore();
 
@@ -13,8 +14,8 @@ ReactDOM.render(
   <ReduxProvider store={reduxStore}>
     <ConnectedRouter history={history} noInitialPop>
       <Switch>
-        <Route exact path="/" component={LoginPage} />
-        <Route path="/console" component={ConsolePage} />
+        <Route exact path={ROUTER_PATH.ROOT_PATH} component={LoginForm} />
+        <Route path={ROUTER_PATH.CONSOLE_PATH} component={ConsolePage} />
       </Switch>
     </ConnectedRouter>
   </ReduxProvider>,

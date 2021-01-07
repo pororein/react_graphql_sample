@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
 export type AuthQueryParameter = {
-    id: string
+    eMailAddress: string
     password: string
 }
 

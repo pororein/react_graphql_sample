@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
@@ -14,10 +15,14 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from '@material-ui/core/Chip';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import userInfoState from '../../state/atom/userInfo';
+import { getAllUserFetch, getAllCheckListsFetch, putReviewInfoFetch } from "../../common/api/fetch";
 import { reviewRequestFormTypes } from "../../state/ducks/reviewRequestForm";
-import { User, Scope } from "../../types";
+import { User } from "../../types/User";
 import { CheckList } from '../../types/CheckList';
 import { ReviewMember } from '../../types/ReviewMember';
+import { Scope } from "../../types/Scope";
+import { ReviewInfo } from "../../types/ReviewInfo";
 
 export type Props = {
     state: reviewRequestFormTypes.ReviewRequestFormState
@@ -31,6 +36,8 @@ export type Props = {
     onHandleClickCreate: () => void
     onCloseAlert: () => void
 };
+
+type CreateFetchState = '' | 'FAILED' | 'SUCCESS';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -60,185 +67,197 @@ function Alert(props: AlertProps) {
 }
 
 export default function reviewRequestForm({
-    state,
-    onChangeTitle,
-    onChangeDocPath,
-    onChangeTags,
-    onChangeReviewee,
-    onChangeReviewer,
-    onChangeCheckList,
-    onChangeScope,
-    onHandleClickCreate,
-    onCloseAlert }: Props) {
-    
-    const classes = useStyles();
+  state,
+  onChangeTitle,
+  onChangeDocPath,
+  onChangeTags,
+  onChangeReviewee,
+  onChangeReviewer,
+  onChangeCheckList,
+  onChangeScope,
+  onHandleClickCreate,
+  onCloseAlert }: Props) {
 
-    return (
-        <Container>
-            <Box m="auto" justifyContent="center" alignItems="center">
-                <Card className={classes.card}>
-                    <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent className={classes.cardContent}>
-                            <Typography className={classes.typography} variant="h4" component="p" display="block">
-                                レビュー作成フォーム
-                            </Typography>
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent className={classes.cardContent}>
-                            <TextField className={classes.textField} label={"タイトル"} value={state.reviewInfo!.title!} onChange={(event) => onChangeTitle(event.target.value as string)} />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent className={classes.cardContent}>
-                            <TextField className={classes.textField} label={"ドキュメントURL"} value={state.reviewInfo!.documentPath!} onChange={(event) => onChangeDocPath(event.target.value as string)} />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent>
-                            <Autocomplete
-                                multiple
-                                value={state.reviewInfo!.tags!}
-                                onChange={(event, newValue) => {
-                                    onChangeTags(
-                                        newValue,
-                                    );
-                                }}
-                                freeSolo
-                                options={state.reviewInfo!.tags!}
-                                getOptionLabel={(option) => `${option}`}
-                                renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Chip
-                                            label={`${option}`}
-                                            {...getTagProps({ index })}
-                                            disabled={!state.reviewInfo!.tags!.find((tag) => { option === tag }) ? false : true }
-                                        />
-                                    ))
-                                }
-                                selectOnFocus
-                                clearOnBlur
-                                handleHomeEndKeys
-                                renderInput={(params) => (
-                                    <TextField {...params} className={classes.textField} label="タグ" />
-                                )}
-                            />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent>
-                            <Autocomplete
-                                multiple
-                                value={state.reviewInfo!.reviewerList!}
-                                onChange={(event, newValue) => {
-                                    onChangeReviewer(
-                                        newValue,
-                                    );
-                                }}
-                                options={state.userList!}
-                                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
-                                renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Chip
-                                            label={`${option.lastName} ${option.firstName}`}
-                                            {...getTagProps({ index })}
-                                            disabled={!state.reviewInfo!.reviewerList!.find((member) => { option._id! === member._id! }) ? false : true }
-                                        />
-                                    ))
-                                }
-                                renderInput={(params) => (
-                                    <TextField {...params} className={classes.textField} label="レビュアー" />
-                                )}
-                            />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent>
-                            <Autocomplete
-                                multiple
-                                value={state.reviewInfo!.revieweeList!}
-                                onChange={(event, newValue) => {
-                                    onChangeReviewee(
-                                        newValue,
-                                    );
-                                }}
-                                options={state.userList!}
-                                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
-                                renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Chip
-                                            label={`${option.lastName} ${option.firstName}`}
-                                            {...getTagProps({ index })}
-                                            disabled={!state.reviewInfo!.revieweeList!.find((member) => { option._id! === member._id! }) ? false : true }
-                                        />
-                                    ))
-                                }
-                                renderInput={(params) => (
-                                    <TextField {...params} className={classes.textField} label="レビューイ" />
-                                )}
-                            />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
-                        <CardContent>
-                            <Autocomplete
-                                multiple
-                                value={state.reviewInfo!.checkLists!}
-                                onChange={(event, newValue) => {
-                                    onChangeCheckList(
-                                        newValue,
-                                    );
-                                }}
-                                options={state.checkLists!}
-                                getOptionLabel={(option) => `${option.title}`}
-                                renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Chip
-                                            label={`${option.title}`}
-                                            {...getTagProps({ index })}
-                                            disabled={!state.reviewInfo!.checkLists!.find((checkList) => { option._id! === checkList._id! }) ? false : true }
-                                        />
-                                    ))
-                                }
-                                renderInput={(params) => (
-                                    <TextField {...params} className={classes.textField} label="チェックリスト" />
-                                )}
-                            />
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" mx="auto" marginTop="20px" justifyContent="center" alignItems="center">
-                        <CardContent>
-                            <InputLabel id="review-request-scope-label">公開範囲</InputLabel>
-                            <Select className={classes.textField}
-                                labelId="review-request-scope-label"
-                                value={state.reviewInfo!.scope!}
-                                onChange={(event: React.ChangeEvent<{ value: unknown }>) => onChangeScope(event.target.value as number)}
-                            >
-                                <MenuItem value={0}>公開</MenuItem>
-                                <MenuItem value={1}>非公開</MenuItem>
-                                <MenuItem value={2}>プロジェクトメンバのみ</MenuItem>
-                            </Select>
-                        </CardContent>
-                    </Box>
-                    <Box display="flex" mx="auto" my="25px" justifyContent="center" alignItems="center">
-                        <CardContent className={classes.cardContent}>
-                            <Button variant="contained" color="primary" onClick={onHandleClickCreate}>
-                                CREATE REVIEW REQUEST
-                            </Button>
-                        </CardContent>
-                    </Box>
-                </Card>
-            </Box>
-            <Snackbar open={(state.status == 'SUCCESS' ? true: false)} autoHideDuration={6000} onClose={onCloseAlert} >
-                <Alert severity="success" onClose={onCloseAlert}>
-                    Review Info Create Success!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={(state.status == 'FAILED' ? true: false)} autoHideDuration={6000} onClose={onCloseAlert} >
-                <Alert severity="error" onClose={onCloseAlert}>
-                    Review Info Create Failed
-                </Alert>
-            </Snackbar>
-        </Container>
-    );
+  const classes = useStyles();
+
+  const [title, setTitle] = useState('');
+  const [docPath, setDocPath] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [revieweeList, setRevieweeList] = useState<ReviewMember[]>([]);
+  const [reviewerList, setReviewerList] = useState<ReviewMember[]>([]);
+  const [checklist, setChecklist] = useState<CheckList[]>([]);
+  const [scope, setScope] = useState<Scope>(Scope.PUBLIC);
+  const [createFetchState, setCreateFetchState] = useState<CreateFetchState>('');
+
+  const userInfo = useRecoilValue(userInfoState);
+
+  const createReviewRequest = () => {
+    let reviewInfo: ReviewInfo = {
+      title: title,
+      documentPath: docPath,
+      tags: tags,
+      reviewerList: reviewerList,
+      revieweeList: revieweeList,
+      checkLists: checklist,
+      scope: scope,
+      creator: userInfo._id,
+    }
+    putReviewInfoFetch(reviewInfo);
+  }
+
+  return (
+    <Container>
+      <Box m="auto" justifyContent="center" alignItems="center">
+        <Card className={classes.card}>
+          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent className={classes.cardContent}>
+              <Typography className={classes.typography} variant="h4" component="p" display="block">
+                レビュー作成フォーム
+              </Typography>
+            </CardContent>
+          </Box>
+          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent className={classes.cardContent}>
+              <TextField className={classes.textField} label={"タイトル"}
+                value={title}
+                onChange={(event) =>
+                  setTitle(event.target.value as string)}
+              />
+            </CardContent>
+          </Box>
+          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent className={classes.cardContent}>
+              <TextField className={classes.textField} label={"ドキュメントURL"} value={docPath}
+                onChange={(event) => setDocPath(event.target.value as string)} />
+            </CardContent>
+          </Box>
+          <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent>
+              <Autocomplete multiple
+                value={tags}
+                onChange={(event, newValue) => { setTags(newValue,);}}
+                freeSolo
+                options={tags}
+                getOptionLabel={(option) => `${option}`}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip label={`${option}`} {...getTagProps({ index })}
+                      disabled={!tags.find((tag) => {
+                      option === tag }) ? false : true }/>
+                  ))
+                }
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                renderInput={(params) => (
+                  <TextField {...params} className={classes.textField} label="タグ" />
+                )}
+              />
+            </CardContent>
+          </Box>
+          <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent>
+              <Autocomplete multiple
+                value={reviewerList}
+                onChange={(event, newValue) => {
+                  setReviewerList(newValue,);
+                }}
+                options={state.userList!}
+                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip label={`${option.lastName} ${option.firstName}`} {...getTagProps({ index })}
+                      disabled={!reviewerList.find((member)=> { option._id! === member._id! }) ? false : true}
+                    />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField {...params} className={classes.textField} label="レビュアー" />
+                )}
+              />
+            </CardContent>
+          </Box>
+          <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent>
+              <Autocomplete multiple
+                value={revieweeList}
+                onChange={(event, newValue) => {
+                  setRevieweeList(
+                    newValue,
+                  );
+                }}
+                options={state.userList!}
+                getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip label={`${option.lastName} ${option.firstName}`} {...getTagProps({ index })}
+                      disabled={!revieweeList.find((member)=> { option._id! === member._id! }) ? false : true}
+                    />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField {...params} className={classes.textField} label="レビューイ" />
+                )}
+              />
+            </CardContent>
+          </Box>
+          <Box display="flex" my="auto" mx="auto" justifyContent="center" alignItems="center">
+            <CardContent>
+              <Autocomplete multiple
+                value={checklist}
+                onChange={(event, newValue) => {
+                  setChecklist(
+                    newValue,
+                  );
+                }}
+                options={checklist}
+                getOptionLabel={(option) => `${option.title}`}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip label={`${option.title}`} {...getTagProps({ index })}
+                      disabled={!state.reviewInfo!.checkLists!.find((checkList)=> { option._id! === checkList._id! }) ? false :true }
+                    />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField {...params} className={classes.textField} label="チェックリスト" />
+                )}
+              />
+            </CardContent>
+          </Box>
+          <Box display="flex" mx="auto" marginTop="20px" justifyContent="center" alignItems="center">
+            <CardContent>
+              <InputLabel id="review-request-scope-label">公開範囲</InputLabel>
+              <Select className={classes.textField}
+                labelId="review-request-scope-label"
+                value={scope}
+                onChange={(event: React.ChangeEvent<{ value: unknown }>) => setScope(event.target.value as number)}
+              >
+                <MenuItem value={0}>公開</MenuItem>
+                <MenuItem value={1}>非公開</MenuItem>
+                <MenuItem value={2}>プロジェクトメンバのみ</MenuItem>
+              </Select>
+            </CardContent>
+          </Box>
+          <Box display="flex" mx="auto" my="25px" justifyContent="center" alignItems="center">
+            <CardContent className={classes.cardContent}>
+              <Button variant="contained" color="primary" onClick={() => { createReviewRequest() }}>
+                CREATE REVIEW REQUEST
+              </Button>
+            </CardContent>
+          </Box>
+        </Card>
+      </Box>
+      <Snackbar open={(createFetchState == 'SUCCESS' ? true : false)} autoHideDuration={6000} onClose={() => { setCreateFetchState('') }}>
+        <Alert severity="success" onClose={() => { setCreateFetchState('') }}>
+          Review Info Create Success!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={(createFetchState == 'FAILED' ? true : false)} autoHideDuration={6000} onClose={() => { setCreateFetchState('') }}>
+        <Alert severity="error" onClose={() => { setCreateFetchState('') }}>
+          Review Info Create Failed
+        </Alert>
+      </Snackbar>
+    </Container>
+  );
 }

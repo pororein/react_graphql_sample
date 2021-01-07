@@ -1,0 +1,1 @@
+export enum ProjectRole { MANAGER, MEMBER };

@@ -24,6 +24,8 @@ import PlaylistAdd from "@material-ui/icons/PlaylistAdd";
 import PeopleOutline from "@material-ui/icons/PeopleOutline";
 import { Route, Switch } from "react-router-dom";
 import ConsoleContents from './consoleContents';
+import ROUTER_PATH from "../routerPath"; 
+import { push } from "connected-react-router";
 
 const drawerWidth = 240;
 
@@ -31,16 +33,6 @@ type MenuItem = {
   text: string,
   icon: JSX.Element,
   action: () => void,  
-};
-
-export type Props = {
-  showUserList: () => void,
-  createReviewRequest: () => void,
-  showReviewList: () => void,
-  showProjectList: () => void,
-  createCheckList: () => void,
-  showCheckList: () => void,
-  logout: () => void,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
   
-  export default function menubar(props: Props) {
+  export default function menubar() {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -108,37 +100,37 @@ const useStyles = makeStyles((theme) => ({
       {
         text: 'Users',
         icon: <PeopleAlt />,
-        action: props.showUserList,
+        action: () => { push(ROUTER_PATH.USER_LIST_PATH) },
       },
       {
         text: 'Create Review',
         icon: <TelegramIcon />,
-        action: props.createReviewRequest,
+        action: () => { push(ROUTER_PATH.REVIEW_REQUEST_PATH) },
       },
       {
         text: 'Show Reviews',
         icon: <DynamicFeedIcon />,
-        action: props.showReviewList,
+        action: () => { push(ROUTER_PATH.REVIEW_LIST_PATH) },
       },
       {
         text: 'Show Projects',
         icon: <PeopleOutline />,
-        action: props.showProjectList,
+        action: () => { push(ROUTER_PATH.PROJECT_LIST_PATH) },
       },
       {
         text: 'Create Check List',
         icon: <PlaylistAdd />,
-        action: props.createCheckList,
+        action: () => { push(ROUTER_PATH.CREATE_CHECKLIST_PATH) },
       },
       {
         text: 'Show Check Lists',
         icon: <ListAltIcon />,
-        action: props.showCheckList,
+        action: () => { push(ROUTER_PATH.CHECK_LIST_PATH) },
       },
       {
         text: 'Logout',
         icon: <ExitToApp />,
-        action: props.logout,
+        action: () => { push(ROUTER_PATH.ROOT_PATH) },
       },
     ];
 
