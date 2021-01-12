@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -66,17 +66,7 @@ function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function reviewRequestForm({
-  state,
-  onChangeTitle,
-  onChangeDocPath,
-  onChangeTags,
-  onChangeReviewee,
-  onChangeReviewer,
-  onChangeCheckList,
-  onChangeScope,
-  onHandleClickCreate,
-  onCloseAlert }: Props) {
+export default function reviewRequestForm() {
 
   const classes = useStyles();
 
@@ -88,6 +78,24 @@ export default function reviewRequestForm({
   const [checklist, setChecklist] = useState<CheckList[]>([]);
   const [scope, setScope] = useState<Scope>(Scope.PUBLIC);
   const [createFetchState, setCreateFetchState] = useState<CreateFetchState>('');
+  const [selectUserList, setSelectUserList] = useState<User[]>([]);
+  const [selectCheckList, setSelectCheckList] = useState<CheckList[]>([]);
+
+  useEffect(() => {
+    let unmounted = false;
+
+    (async () => {
+      let userList = await getAllUserFetch();
+      let checkList = await getAllCheckListsFetch();
+
+      if (!unmounted) {
+        setSelectUserList(userList);
+        setSelectCheckList(checkList);
+      };
+    })
+
+    return () => { unmounted = true; };
+  })
 
   const userInfo = useRecoilValue(userInfoState);
 
@@ -162,7 +170,7 @@ export default function reviewRequestForm({
                 onChange={(event, newValue) => {
                   setReviewerList(newValue,);
                 }}
-                options={state.userList!}
+                options={selectUserList}
                 getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => (
@@ -186,7 +194,7 @@ export default function reviewRequestForm({
                     newValue,
                   );
                 }}
-                options={state.userList!}
+                options={selectUserList}
                 getOptionLabel={(option) => `${option.lastName} ${option.firstName}`}
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => (
@@ -210,12 +218,12 @@ export default function reviewRequestForm({
                     newValue,
                   );
                 }}
-                options={checklist}
+                options={selectCheckList}
                 getOptionLabel={(option) => `${option.title}`}
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => (
                     <Chip label={`${option.title}`} {...getTagProps({ index })}
-                      disabled={!state.reviewInfo!.checkLists!.find((checkList)=> { option._id! === checkList._id! }) ? false :true }
+                      disabled={!checklist.find((checkList)=> { option._id! === checkList._id! }) ? false :true }
                     />
                   ))
                 }
