@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
@@ -14,9 +14,8 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
 import { push } from "connected-react-router";
-import ROUTER_PATH from "../routerPath"; 
+import ROUTER_PATH from "../routerPath";
 import userInfoStateAtom from "../../state/atom/userInfo";
-import { loginFormTypes } from "../../state/ducks/loginForm";
 import { authFetch } from "../../common/api/fetch";
 import type { User } from "../../types/User";
 
@@ -43,26 +42,24 @@ const useStyles = makeStyles((theme) => ({
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    color: "#fff",
   },
 }));
 
-export type Props = {
-  state: loginFormTypes.Status,
-  onChangeEMail: (eMailAddress: string) => void,
-  onChangePassword: (password: string) => void,
-  login: () => void,
-};
+type LoginState = "" | "LOGGINGIN" | "SUCCESS" | "FAILED";
 
-type LoginState = '' | 'LOGGINGIN' | 'SUCCESS' | 'FAILED';
-
+/**
+ *
+ * ログイン画面 コンポーネント
+ * @export コンポーネント本体
+ * @return {JSX.Element}
+ */
 export default function loginForm(): JSX.Element {
-
   const classes = useStyles();
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginState, setLoginState] = useState<LoginState>('');
-  const [userInfoState, setUserInfoState] = useRecoilState(userInfoStateAtom);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginState, setLoginState] = useState<LoginState>("");
+  const setUserInfoState = useSetRecoilState(userInfoStateAtom);
 
   const login = (emailAddress: string, password: string) => {
     setLoginState("LOGGINGIN");
@@ -76,58 +73,106 @@ export default function loginForm(): JSX.Element {
       .catch((error) => {
         setLoginState("FAILED");
       });
-  }
+  };
 
   return (
     <Container>
       <Box m="auto" justifyContent="center" alignItems="center">
         <Card className={classes.card}>
-          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+          <Box
+            display="flex"
+            mx="auto"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CardContent className={classes.cardHeader}>
-            <Box display="flex" m="auto" justifyContent="center" alignItems="center">
-              <Typography className={classes.typography} align="center" variant="h2" component="p" display="block">
+              <Box
+                display="flex"
+                m="auto"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Typography
+                  className={classes.typography}
+                  align="center"
+                  variant="h2"
+                  component="p"
+                  display="block"
+                >
                   Smart Review App
-              </Typography>
+                </Typography>
               </Box>
             </CardContent>
           </Box>
-          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+          <Box
+            display="flex"
+            mx="auto"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CardContent className={classes.cardContent}>
               <Box m="auto" justifyContent="center" alignItems="center">
-                <TextField className={classes.textField} value={emailAddress} variant="outlined" InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircleIcon />
-                    </InputAdornment>
-                  ),
-                }}
+                <TextField
+                  className={classes.textField}
+                  value={emailAddress}
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircleIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                   onChange={(event) => setEmailAddress(event.target.value)}
-                  error={(loginState == "FAILED")}
+                  error={loginState == "FAILED"}
                 />
               </Box>
             </CardContent>
           </Box>
-          <Box display="flex" mx="auto" justifyContent="center" alignItems="center">
+          <Box
+            display="flex"
+            mx="auto"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CardContent className={classes.cardContent}>
               <Box mx="auto" justifyContent="center" alignItems="center">
-                <TextField className={classes.textField} value={password} variant="outlined" type="password" InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon />
-                    </InputAdornment>
+                <TextField
+                  className={classes.textField}
+                  value={password}
+                  variant="outlined"
+                  type="password"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
                     ),
-                }}
+                  }}
                   onChange={(event) => setPassword(event.target.value)}
-                  error={(loginState == "FAILED")}
+                  error={loginState == "FAILED"}
                 />
               </Box>
             </CardContent>
           </Box>
-          <Box display="flex" mx="auto" py="10px" justifyContent="center" alignItems="center">
-            <Button variant="contained" color="primary" onClick={() => login(emailAddress, password)}>
+          <Box
+            display="flex"
+            mx="auto"
+            py="10px"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => login(emailAddress, password)}
+            >
               LOGIN
             </Button>
-            <Backdrop className={classes.backdrop} open={(loginState == "LOGGINGIN")} >
+            <Backdrop
+              className={classes.backdrop}
+              open={loginState == "LOGGINGIN"}
+            >
               <CircularProgress color="inherit" />
             </Backdrop>
           </Box>

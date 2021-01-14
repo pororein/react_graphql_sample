@@ -11,92 +11,107 @@ import TableRow from "@material-ui/core/TableRow";
 import Link from "@material-ui/core/Link";
 
 export type Column = {
-    id: string,
-    name: string,
+  id: string;
+  name: string;
+};
+
+export type Row = {
+  id: string;
+  data: object;
 };
 
 export type Props = {
-    columns: Column[],
-    rows: any,
-    linkKey ?: string,
-    handleAction: (id: string | number) => void,
+  columns: Column[];
+  rows: any;
+  linkKey?: string;
+  handleAction: (id: string | number) => void;
 };
 
 const useStyles = makeStyles({
-    root: {
-        width: '100%',
-    },
-    container: {
-        maxHeight: 440,
-    },
+  root: {
+    width: "100%",
+  },
+  container: {
+    maxHeight: 440,
+  },
 });
 
-const listViewTable: React.FC<Props> = props => {
-    const classes = useStyles();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
+const listViewTable: React.FC<Props> = (props) => {
+  const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
-    return (
-        <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {props.columns.map((column: Column) => {
-                                return (
-                                    <TableCell key={column.id} align="left">
-                                        {column.name}
-                                    </TableCell>
-                                );
-                            })}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
-                            return (
-                                <TableRow role="checkbox" tabIndex={-1}>
-                                    {props.columns.map((column: Column) => {
-                                        const value: string | number = row[column.name];
-                                        if (props.linkKey && column.name == props.linkKey) {
-                                            return (
-                                                <TableCell key={column.id} align="left">
-                                                    <Link onClick={() => { props.handleAction(value) }}>{value}</Link>
-                                                </TableCell>
-                                            );
-                                        } else {
-                                            return (
-                                                <TableCell key={column.id} align="left">
-                                                    {value}
-                                                </TableCell>
-                                            );
-                                        }
-                                    })}
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={props.rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-        </Paper>
-    );
-}
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  return (
+    <Paper className={classes.root}>
+      <TableContainer className={classes.container}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {props.columns.map((column: Column) => {
+                return (
+                  <TableCell key={column.id} align="left">
+                    {column.name}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row: Row) => {
+                return (
+                  <TableRow role="checkbox" tabIndex={-1} key={row.id}>
+                    {props.columns.map((column: Column) => {
+                      const value: string | number = row.id;
+                      if (props.linkKey && column.name == props.linkKey) {
+                        return (
+                          <TableCell key={column.id} align="left">
+                            <Link
+                              onClick={() => {
+                                props.handleAction(value);
+                              }}
+                            >
+                              {value}
+                            </Link>
+                          </TableCell>
+                        );
+                      } else {
+                        return (
+                          <TableCell key={column.id} align="left">
+                            {value}
+                          </TableCell>
+                        );
+                      }
+                    })}
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={props.rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
+};
 
 export default listViewTable;
